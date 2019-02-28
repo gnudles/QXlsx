@@ -7,6 +7,7 @@
 #include <QList>
 #include <QVariant>
 #include <QDir>
+#include <QStringList>
 
 #include <QDebug>
 
@@ -23,7 +24,7 @@ using namespace std;
 #include "xlsxworkbook.h"
 using namespace QXlsx;
 
-bool loadAndSaveSlxsx(QString testDir);
+bool loadAndSaveSlxsx(QString srcDir, QString destDir);
 
 int main(int argc, char *argv[])
 {
@@ -31,18 +32,43 @@ int main(int argc, char *argv[])
 
     qDebug() << "[debug] current path : " << QDir::currentPath();
 
-    // Fix testDir for your own test environment;
-    QString testDir
-    testDir =  QDir::currentPath() + QString("../xlsx_files/");
+    // Fix directories for your own test environment;
+    QString srcDir =  QDir::currentPath() + QString("/../xlsx_files/");
+    QString dstDir =  QDir::currentPath() + QString("/../xlsx_files2/");
 
-    loadAndSaveSlxsx(testDir);
+    loadAndSaveSlxsx( srcDir, dstDir );
 
     return 0;
 }
 
-bool loadAndSaveSlxsx(QString testDir)
+bool loadAndSaveSlxsx(QString srcDir, QString destDir)
 {
+    QDir dir( srcDir );
+    // QString s = dir.absoluteFilePath( testDir );
+    QStringList el = dir.entryList(QStringList() << "*.*", QDir::Files);
 
+    Q_FOREACH(QString entry, el)
+    {
+        using namespace QXlsx;
+
+        QString srcFilePath = srcDir + entry;
+        QString dstFilePath = destDir + entry;
+
+        Document doc( srcFilePath );
+        if ( !doc.load() )
+        {
+            qDebug() << "[debug] failed to load : " << srcFilePath;
+            continue;
+        }
+
+        if ( !doc.saveAs( dstFilePath ) )
+        {
+            qDebug() << "[debug] failed to save : " << dstFilePath;
+            continue;
+        }
+
+        qDebug() << srcFilePath;
+    }
 
 
 

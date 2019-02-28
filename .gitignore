@@ -4,6 +4,8 @@
 !/Copycat/test1-google.xlsx
 !/Copycat/test2-libre.xlsx
 
+/test/xlsx_files2/*.xlsx
+
 # Prerequisites
 *.d
 

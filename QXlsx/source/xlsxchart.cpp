@@ -383,22 +383,22 @@ bool ChartPrivate::loadXmlPlotAreaElement(QXmlStreamReader &reader)
     }
     else if (reader.name() == QLatin1String("catAx")) // choose one : catAx, dateAx, serAx, valAx
     {
-        qDebug() << "loadXmlAxisCatAx()";
+        // qDebug() << "loadXmlAxisCatAx()";
         loadXmlAxisCatAx(reader);
     }
     else if (reader.name() == QLatin1String("dateAx")) // choose one : catAx, dateAx, serAx, valAx
     {
-        qDebug() << "loadXmlAxisDateAx()";
+        // qDebug() << "loadXmlAxisDateAx()";
         loadXmlAxisDateAx(reader);
     }
     else if (reader.name() == QLatin1String("serAx")) // choose one : catAx, dateAx, serAx, valAx
     {
-        qDebug() << "loadXmlAxisSerAx()";
+        // qDebug() << "loadXmlAxisSerAx()";
         loadXmlAxisSerAx(reader);
     }
     else if (reader.name() == QLatin1String("valAx")) // choose one : catAx, dateAx, serAx, valAx
     {
-        qDebug() << "loadXmlAxisValAx()";
+        // qDebug() << "loadXmlAxisValAx()";
         loadXmlAxisValAx(reader);
     }
     else if (reader.name() == QLatin1String("dTable"))
