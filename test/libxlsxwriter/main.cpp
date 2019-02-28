@@ -67,7 +67,7 @@ bool loadAndSaveSlxsx(QString srcDir, QString destDir)
             continue;
         }
 
-        qDebug() << srcFilePath;
+        qDebug() << dstFilePath;
     }
 
 
