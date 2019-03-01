@@ -55,7 +55,7 @@ public:
     Type type;
     XlsxAxis::AxisPos axisPos;
     int axisId;
-    int crossAx;
+    uint crossAx;
     QMap< XlsxAxis::AxisPos, QString > axisNames;
 };
 
@@ -88,7 +88,12 @@ protected:
     bool loadXmlAxisSerAx(QXmlStreamReader &reader);
     bool loadXmlAxisValAx(QXmlStreamReader &reader);
     bool loadXmlAxisEG_AxShared(QXmlStreamReader &reader, XlsxAxis* axis);
+    bool loadTxPr(QXmlStreamReader &reader, XlsxAxis* axis);
+    bool loadTxPr_BodyPr(QXmlStreamReader &reader, XlsxAxis* axis);
+    bool loadTxPr_LstStyle(QXmlStreamReader &reader, XlsxAxis* axis);
+    bool loadTxPr_P(QXmlStreamReader &reader, XlsxAxis* axis);
     bool loadXmlAxisEG_AxShared_Scaling(QXmlStreamReader &reader, XlsxAxis* axis);
+    bool loadExtList(QXmlStreamReader &reader, XlsxAxis* axis);
     bool loadXmlAxisEG_AxShared_Title(QXmlStreamReader &reader, XlsxAxis* axis);
     bool loadXmlAxisEG_AxShared_Title_Overlay(QXmlStreamReader &reader, XlsxAxis* axis);
     bool loadXmlAxisEG_AxShared_Title_Tx(QXmlStreamReader &reader, XlsxAxis* axis);

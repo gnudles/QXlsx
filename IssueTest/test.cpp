@@ -18,7 +18,31 @@ using namespace std;
 #include "xlsxrichstring.h"
 #include "xlsxworkbook.h"
 
-int test( QVector<QVariant> params )
+int test2( QVector<QVariant> params )
+{
+    qDebug() << "[debug] current path : " << QDir::currentPath();
+
+    using namespace QXlsx;
+
+    Document doc("chart_font06.xlsx");
+    if ( ! doc.load() )
+    {
+        qDebug() << "[debug] faield to load xlsx";
+        return (-1);
+    }
+
+    if ( !doc.saveAs("doc2.xlsx") )
+    {
+        qDebug() << "[debug] faield to save xlsx";
+        return (-2);
+    }
+
+    qDebug() << "[debug] success to save xlsx";
+
+    return 0;
+}
+
+int test1( QVector<QVariant> params )
 {
     qDebug() << "[debug] current path : " << QDir::currentPath();
 
@@ -55,4 +79,3 @@ int test( QVector<QVariant> params )
 
     return 0;
 }
-
