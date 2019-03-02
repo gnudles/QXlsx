@@ -228,14 +228,14 @@ bool DocumentPrivate::loadPackage(QIODevice *device)
 	}
 
 	//load charts
-	QList<QSharedPointer<Chart> > chartFileToLoad = workbook->chartFiles();
+    QList< QSharedPointer<Chart> > chartFileToLoad = workbook->chartFiles();
 	for (int i=0; i<chartFileToLoad.size(); ++i) {
 		QSharedPointer<Chart> cf = chartFileToLoad[i];
 		cf->loadFromXmlData(zipReader.fileData(cf->filePath()));
 	}
 
 	//load media files
-	QList<QSharedPointer<MediaFile> > mediaFileToLoad = workbook->mediaFiles();
+    QList< QSharedPointer<MediaFile> > mediaFileToLoad = workbook->mediaFiles();
 	for (int i=0; i<mediaFileToLoad.size(); ++i) {
 		QSharedPointer<MediaFile> mf = mediaFileToLoad[i];
 		const QString path = mf->fileName();

@@ -36,5 +36,8 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # source code
 
 SOURCES += \
-main.cpp \
-test.cpp
+    main.cpp \
+    test.cpp
+
+RESOURCES += \
+    it.qrc

@@ -16,6 +16,10 @@
 #include "xlsxabstractooxmlfile_p.h"
 #include "xlsxchart.h"
 
+#include "Attr.h"
+#include "Node.h"
+#include "XMLDOMReader.h"
+
 QT_BEGIN_NAMESPACE_XLSX
 
 class XlsxSeries
@@ -62,15 +66,13 @@ public:
 class ChartPrivate : public AbstractOOXmlFilePrivate
 {
     Q_DECLARE_PUBLIC(Chart)
-
 public:
     ChartPrivate(Chart *q, Chart::CreateFlag flag);
     ~ChartPrivate();
-
 public:
     bool loadXmlChart(QXmlStreamReader &reader);
-    bool loadXmlPlotArea(QXmlStreamReader &reader);
 protected:
+    bool loadXmlPlotArea(QXmlStreamReader &reader);
     bool loadXmlPlotAreaElement(QXmlStreamReader &reader);
 public:
     bool loadXmlXxxChart(QXmlStreamReader &reader);
@@ -103,6 +105,18 @@ protected:
     bool loadXmlAxisEG_AxShared_Title_Tx_Rich_P_R(QXmlStreamReader &reader, XlsxAxis* axis);
 
 public:
+    bool loadFromXmlFile(QIODevice *device);
+protected:
+    bool load1Chart(XMLDOM::XMLDOMReader *pReader, XMLDOM::Node* ptrChart);
+    bool load1Lang(XMLDOM::XMLDOMReader *pReader, XMLDOM::Node* ptrLang);
+    bool load1PrinterSettings(XMLDOM::XMLDOMReader *pReader, XMLDOM::Node* ptrPrinterSettings);
+protected:
+    bool load2Title(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrTitle );
+    bool load2PlotArea(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPlotArea );
+    bool load2Legend(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrLegend );
+    bool load2PlotVisOnly(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPlotVisOnly );
+
+public:
     void saveXmlChart(QXmlStreamWriter &writer) const;
     void saveXmlChartTitle(QXmlStreamWriter &writer) const;
     void saveXmlPieChart(QXmlStreamWriter &writer) const;
@@ -118,12 +132,11 @@ protected:
     void saveXmlAxisDateAx(QXmlStreamWriter &writer, XlsxAxis* axis) const;
     void saveXmlAxisSerAx(QXmlStreamWriter &writer, XlsxAxis* axis) const;
     void saveXmlAxisValAx(QXmlStreamWriter &writer, XlsxAxis* axis) const;
-
+protected:
     void saveXmlAxisEG_AxShared(QXmlStreamWriter &writer, XlsxAxis* axis) const;
     void saveXmlAxisEG_AxShared_Title(QXmlStreamWriter &writer, XlsxAxis* axis) const;
     QString GetAxisPosString( XlsxAxis::AxisPos axisPos ) const;
     QString GetAxisName(XlsxAxis* ptrXlsxAxis) const;
-
 public:
     Chart::ChartType chartType;
     QList< QSharedPointer<XlsxSeries> > seriesList;

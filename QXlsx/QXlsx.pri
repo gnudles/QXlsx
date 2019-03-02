@@ -44,6 +44,9 @@ INCLUDEPATH += .
 INCLUDEPATH += $${QXLSX_PARENTPATH}
 INCLUDEPATH += $${QXLSX_HEADERPATH}
 
+# XMLDOMReader https://github.com/j2doll/XMLDOMReader
+include(./XMLDOMReader/XMLDOMReader.pri)
+
 ######################################################################
 # source code 
 

@@ -15,6 +15,10 @@
 #include "xlsxcellrange.h"
 #include "xlsxutility_p.h"
 
+#include "Attr.h"
+#include "Node.h"
+#include "XMLDOMReader.h"
+
 QT_BEGIN_NAMESPACE_XLSX
 
 ChartPrivate::ChartPrivate(Chart *q, Chart::CreateFlag flag)
@@ -25,22 +29,6 @@ ChartPrivate::ChartPrivate(Chart *q, Chart::CreateFlag flag)
 
 ChartPrivate::~ChartPrivate()
 {
-    /*
-    QList< QSharedPointer<XlsxSeries> > seriesList;
-    QList< QSharedPointer<XlsxAxis> > axisList;
-    QMap< XlsxAxis::AxisPos, QString > axisNames;
-     */
-    // qDeleteAll( seriesList );
-    // qDeleteAll( axisList );
-    // qDeleteAll( axisNames );
-
-    /*
-    for (int i = 0; i < axisList.size(); ++i)
-    {
-        QSharedPointer<XlsxAxis> ptr = axisList.at(i);
-        // ptr->deleteLater();
-    }
-    */
 }
 
 
@@ -261,9 +249,14 @@ void Chart::saveToXmlFile(QIODevice *device) const
         </printSettings>
     </chartSpace>
 */
+
+// #define LOADING_CHART_TYPE_1
+
 bool Chart::loadFromXmlFile(QIODevice *device)
 {
     Q_D(Chart);
+
+#ifdef LOADING_CHART_TYPE_1
 
     QXmlStreamReader reader(device);
     while (!reader.atEnd())
@@ -271,9 +264,6 @@ bool Chart::loadFromXmlFile(QIODevice *device)
         reader.readNextStartElement();
         if (reader.tokenType() == QXmlStreamReader::StartElement)
         {
-            // qDebug() << " [1] " << reader.name();
-            // "chartSpace" "lang" "chart" "printSettings"
-
             if (reader.name() == QLatin1String("chartSpace"))
             {
                 // qDebug() << " root of chart";
@@ -300,6 +290,14 @@ bool Chart::loadFromXmlFile(QIODevice *device)
     }
 
     return true;
+
+#else
+
+    bool ret;
+    ret = d->loadFromXmlFile( device );
+    return ret;
+
+#endif
 }
 
 bool ChartPrivate::loadXmlChart(QXmlStreamReader &reader)
@@ -339,6 +337,228 @@ bool ChartPrivate::loadXmlChart(QXmlStreamReader &reader)
             break;
         }
     }
+
+    return true;
+}
+
+/*
+<xsd:complexType name="CT_ChartSpace">
+    <xsd:sequence>
+...
+    </xsd:sequence>
+</xsd:complexType>
+*/
+bool ChartPrivate::loadFromXmlFile(QIODevice *device)
+{
+    XMLDOM::XMLDOMReader domReader;
+    if ( !domReader.load(device) )
+    {
+        // qDebug() << "failed to load";
+        return false;
+    }
+
+    // <xsd:element name="chart" type="CT_Chart" minOccurs="1" maxOccurs="1"/>
+    XMLDOM::Node* ptrChart = domReader.findNode( 1, "c:chart" );
+    if ( NULL == ptrChart )
+    {
+        return false; // mandatory field
+    }
+    load1Chart(&domReader, ptrChart);
+
+    // <xsd:element name="lang" type="CT_TextLanguageID" minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrLang = domReader.findNode( 1, "c:lang" );
+    if ( NULL != ptrLang )
+    {
+        load1Lang(&domReader, ptrLang);
+    }
+
+    // <xsd:element name="printSettings" type="CT_PrintSettings" minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrPrinterSetting = domReader.findNode( 1, "c:printSettings" );
+    if ( NULL != ptrPrinterSetting )
+    {
+        load1PrinterSettings(&domReader, ptrPrinterSetting);
+    }
+
+    //! TODO:
+    // <xsd:element name="date1904" type="CT_Boolean" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="roundedCorners" type="CT_Boolean" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="style" type="CT_Style" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="clrMapOvr" type="a:CT_ColorMapping" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="pivotSource" type="CT_PivotSource" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="protection" type="CT_Protection" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="spPr" type="a:CT_ShapeProperties" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="txPr" type="a:CT_TextBody" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="externalData" type="CT_ExternalData" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="userShapes" type="CT_RelId" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+
+    domReader.clear();
+
+    return true;
+}
+
+/*
+<xsd:complexType name="CT_Chart">
+    <xsd:sequence>
+    ...
+    </xsd:sequence>
+</xsd:complexType>
+*/
+bool ChartPrivate::load1Chart(XMLDOM::XMLDOMReader *pReader, XMLDOM::Node* ptrChart)
+{
+    if ( NULL == ptrChart )
+        return false;
+
+    // <xsd:element name="plotArea" type="CT_PlotArea" minOccurs="1" maxOccurs="1"/>
+    XMLDOM::Node* ptrPlotArea = pReader->findNode( 2, "c:plotArea" );
+    if ( NULL == ptrPlotArea )
+    {
+        return false; // mandatory field
+    }
+    load2PlotArea( pReader, ptrPlotArea );
+
+    // <xsd:element name="title" type="CT_Title" minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrTitle = pReader->findNode( 2, "c:title" );
+    if ( NULL != ptrTitle )
+    {
+        load2Title( pReader, ptrTitle );
+    }
+
+    // <xsd:element name="legend" type="CT_Legend" minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrLegend = pReader->findNode( 2, "c:legend" );
+    if ( NULL != ptrLegend )
+    {
+        load2Legend( pReader, ptrLegend );
+    }
+
+    // <xsd:element name="plotVisOnly" type="CT_Boolean" minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrPlotVisOnly = pReader->findNode( 2, "c:plotVisOnly" );
+    if ( NULL != ptrPlotVisOnly )
+    {
+        load2PlotVisOnly( pReader, ptrPlotVisOnly );
+    }
+
+    //! TODO:
+    // <xsd:element name="autoTitleDeleted" type="CT_Boolean"       minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="pivotFmts"        type="CT_PivotFmts"     minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="view3D"           type="CT_View3D"        minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="floor"            type="CT_Surface"       minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="sideWall"         type="CT_Surface"       minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="backWall"         type="CT_Surface"       minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="dispBlanksAs"     type="CT_DispBlanksAs"  minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="showDLblsOverMax" type="CT_Boolean"       minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="extLst"           type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+
+    return true;
+}
+
+/*
+<xsd:complexType name="CT_Title">
+    <xsd:sequence>
+...
+    </xsd:sequence>
+</xsd:complexType>
+*/
+bool ChartPrivate::load2Title(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrTitle )
+{
+    // c:title
+
+    // <xsd:element name="tx" type="CT_Tx" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="layout" type="CT_Layout" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="overlay" type="CT_Boolean" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="spPr" type="a:CT_ShapeProperties" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="txPr" type="a:CT_TextBody" minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+
+    return true;
+}
+
+/*
+<xsd:complexType name="CT_PlotArea">
+    <xsd:sequence>
+        ...
+    </xsd:sequence>
+</xsd:complexType>
+*/
+bool ChartPrivate::load2PlotArea(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPlotArea )
+{
+    // c:plotarea
+
+    // debugging code
+    /*
+    for (int cindex = 0 ; cindex < ptrPlotArea->childNode.size() ; cindex ++)
+    {
+        XMLDOM::Node* pNode = ptrPlotArea->childNode.at( cindex );
+        if ( NULL == pNode )
+            continue;
+
+        qDebug() << pNode->level << pNode->nodeName << pNode->nodeText ;
+    }
+    */
+
+    // <xsd:element name="layout" type="CT_Layout" minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrLayout = pReader->findNode( 3, "c:layout" );
+    if ( NULL != ptrLayout )
+    {
+        // load3Layout( pReader, ptrLayout );
+    }
+
+    XMLDOM::Node* ptrAreaChart = pReader->findNode( 3, "c:areaChart" );
+    XMLDOM::Node* ptrArea3DChart = pReader->findNode( 3, "c:area3DChart" );
+    XMLDOM::Node* ptrLineChart = pReader->findNode( 3, "c:lineChart" );
+    XMLDOM::Node* ptrLine3DChart = pReader->findNode( 3, "c:line3DChart" );
+    XMLDOM::Node* ptrStockChart = pReader->findNode( 3, "c:stockChart" );
+    XMLDOM::Node* ptrRadarChart = pReader->findNode( 3, "c:radarChart" );
+    XMLDOM::Node* ptrScatterChart = pReader->findNode( 3, "c:scatterChart" );
+    XMLDOM::Node* ptrPiChart = pReader->findNode( 3, "c:pieChart" );
+    XMLDOM::Node* ptrPie3DChart = pReader->findNode( 3, "c:pie3DChart" );
+    XMLDOM::Node* ptrDoughnutChart = pReader->findNode( 3, "c:doughnutChart" );
+    XMLDOM::Node* ptrBarChart = pReader->findNode( 3, "c:barChart" );
+    XMLDOM::Node* ptrBar3DChart = pReader->findNode( 3, "c:bar3DChart" );
+    XMLDOM::Node* ptrOfPieChart = pReader->findNode( 3, "c:ofPieChart" );
+    XMLDOM::Node* ptrSurfaceChart = pReader->findNode( 3, "c:surfaceChart" );
+    XMLDOM::Node* ptrSurface3DChart = pReader->findNode( 3, "c:surface3DChart" );
+    XMLDOM::Node* ptrBubbleChart = pReader->findNode( 3, "c:bubbleChart" );
+
+    // <xsd:element name="dTable" type="CT_DTable" minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrDTable = pReader->findNode( 3, "c:dTable" );
+
+    // <xsd:element name="spPr" type="a:CT_ShapeProperties" minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrSpPr = pReader->findNode( 3, "c:spPr" );
+
+    // <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrExtLst = pReader->findNode( 3, "c:extLst" );
+
+    return true;
+}
+
+bool ChartPrivate::load2Legend(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrLegend )
+{
+    // c:legend
+
+    return true;
+}
+
+bool ChartPrivate::load2PlotVisOnly(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPlotVisOnly )
+{
+    // plotVisOnly
+
+    return true;
+}
+
+bool ChartPrivate::load1Lang(XMLDOM::XMLDOMReader *pReader, XMLDOM::Node* ptrLang)
+{
+    if ( NULL == ptrLang )
+        return false;
+
+    return true;
+}
+
+bool ChartPrivate::load1PrinterSettings(XMLDOM::XMLDOMReader *pReader, XMLDOM::Node* ptrPrinterSetting)
+{
+    if ( NULL == ptrPrinterSetting )
+        return false;
+
     return true;
 }
 
@@ -621,7 +841,6 @@ void ChartPrivate::saveXmlChart(QXmlStreamWriter &writer) const
 
     writer.writeStartElement(QStringLiteral("c:plotArea"));
 
-    // dev35
     switch (chartType)
     {
         case Chart::CT_AreaChart:       saveXmlAreaChart(writer); break;
@@ -1231,9 +1450,6 @@ bool ChartPrivate::loadXmlAxisEG_AxShared(QXmlStreamReader &reader, XlsxAxis* ax
 
         if ( reader.tokenType() == QXmlStreamReader::StartElement )
         {
-
-            qDebug() << QTime::currentTime() << reader.name();
-
             if ( reader.name() == QLatin1String("axId") )
             {
                 // mandatory element

@@ -49,7 +49,6 @@ public:
 public:
     bool loadFromXmlFile(QIODevice *device);
     void saveToXmlFile(QIODevice *device) const;
-
 };
 
 QT_END_NAMESPACE_XLSX

@@ -20,11 +20,11 @@ using namespace std;
 
 int test2( QVector<QVariant> params )
 {
-    qDebug() << "[debug] current path : " << QDir::currentPath();
-
     using namespace QXlsx;
 
-    Document doc("chart_font06.xlsx");
+    qDebug() << "[debug] current path : " << QDir::currentPath();
+
+    Document doc(":/chart_font06.xlsx");
     if ( ! doc.load() )
     {
         qDebug() << "[debug] faield to load xlsx";
@@ -44,9 +44,9 @@ int test2( QVector<QVariant> params )
 
 int test1( QVector<QVariant> params )
 {
-    qDebug() << "[debug] current path : " << QDir::currentPath();
-
     using namespace QXlsx;
+
+    qDebug() << "[debug] current path : " << QDir::currentPath();
 
     Document output;
 
