@@ -1,8 +1,5 @@
 // XlsxTableModel.h
-
-// QXlsx
-// MIT License
-// https://github.com/j2doll/QXlsx
+// QXlsx https://github.com/QtExcel/QXlsx
 
 #ifndef XLSX_MODEL_H
 #define XLSX_MODEL_H

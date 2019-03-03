@@ -14,7 +14,8 @@ Window {
     Component
     {
         id : columnComponent;
-        TableViewColumn {
+        TableViewColumn
+        {
             resizable : true;
             movable : false;
             /*width: 100;*/
@@ -45,6 +46,8 @@ Window {
             }
             return temp;
         }
+
+
 
     } // TableView
 

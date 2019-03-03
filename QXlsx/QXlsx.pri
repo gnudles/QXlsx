@@ -1,6 +1,6 @@
 #
 # QXlsx.pri 
-#
+# https://github.com/QtExcel/QXlsx
 
 QT += core
 QT += gui-private
@@ -15,6 +15,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # In order to do so, uncomment the following line.
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+
+######################################################################
+# Setting of QXlsx path 
 
 isEmpty(QXLSX_PARENTPATH) {
     message( 'QXLSX_PARENTPATH is empty. use default value.' )
@@ -44,11 +47,8 @@ INCLUDEPATH += .
 INCLUDEPATH += $${QXLSX_PARENTPATH}
 INCLUDEPATH += $${QXLSX_HEADERPATH}
 
-# XMLDOMReader https://github.com/j2doll/XMLDOMReader
-include(./XMLDOMReader/XMLDOMReader.pri)
-
 ######################################################################
-# source code 
+# Source code of QXlsx
 
 HEADERS += \
 $${QXLSX_HEADERPATH}xlsxabstractooxmlfile.h \
@@ -132,6 +132,21 @@ $${QXLSX_SOURCEPATH}xlsxzipreader.cpp \
 $${QXLSX_SOURCEPATH}xlsxzipwriter.cpp \
 $${QXLSX_SOURCEPATH}xlsxcelllocation.cpp
 
+######################################################################
+# XMLDOMReader 
+# https://github.com/j2doll/XMLDOMReader
+
+QT += xml
+
+HEADERS += \
+$${QXLSX_HEADERPATH}xdattr.h \
+$${QXLSX_HEADERPATH}xdnode.h \
+$${QXLSX_HEADERPATH}xdxmldomreader.h
+
+SOURCES += \
+$${QXLSX_SOURCEPATH}xdattr.cpp \
+$${QXLSX_SOURCEPATH}xdnode.cpp \
+$${QXLSX_SOURCEPATH}xdxmldomreader.cpp 
 
 ######################################################################
 # custom setting for compiler & system
@@ -189,4 +204,5 @@ mac {
 	} else {
 	}		
 }
+
 

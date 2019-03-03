@@ -26,15 +26,15 @@ DEFINES += QT_DEPRECATED_WARNINGS
 include(../QXlsx/QXlsx.pri)
 
 HEADERS += \
-XlsxTableModel.h \
+    XlsxTableModel.h \
     DynArray2D.h
 
 SOURCES += \
-main.cpp \
-XlsxTableModel.cpp
+    main.cpp \
+    XlsxTableModel.cpp
 
 RESOURCES += \
-qml.qrc
+    qml.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH =

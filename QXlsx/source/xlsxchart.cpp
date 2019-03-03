@@ -15,23 +15,11 @@
 #include "xlsxcellrange.h"
 #include "xlsxutility_p.h"
 
-#include "Attr.h"
-#include "Node.h"
-#include "XMLDOMReader.h"
+#include "xdattr.h"
+#include "xdnode.h"
+#include "xdxmldomreader.h"
 
 QT_BEGIN_NAMESPACE_XLSX
-
-ChartPrivate::ChartPrivate(Chart *q, Chart::CreateFlag flag)
-    : AbstractOOXmlFilePrivate(q, flag), chartType(static_cast<Chart::ChartType>(0))
-{
-
-}
-
-ChartPrivate::~ChartPrivate()
-{
-}
-
-
 
 /*!
  * \internal
@@ -48,6 +36,17 @@ Chart::Chart(AbstractSheet *parent, CreateFlag flag)
 Chart::~Chart()
 {
 }
+
+ChartPrivate::ChartPrivate(Chart *q, Chart::CreateFlag flag)
+    : AbstractOOXmlFilePrivate(q, flag), chartType(static_cast<Chart::ChartType>(0))
+{
+
+}
+
+ChartPrivate::~ChartPrivate()
+{
+}
+
 
 /*!
  * Add the data series which is in the range \a range of the \a sheet.
@@ -93,7 +92,6 @@ void Chart::addSeries(const CellRange &range, AbstractSheet *sheet)
             series->numberDataSource_numRef = sheetName + QLatin1String("!") + subRange.toString(true, true);
             d->seriesList.append(series);
         }
-
     }
     else
     {
@@ -361,9 +359,12 @@ bool ChartPrivate::loadFromXmlFile(QIODevice *device)
     XMLDOM::Node* ptrChart = domReader.findNode( 1, "c:chart" );
     if ( NULL == ptrChart )
     {
-        return false; // mandatory field
+        return false; // 'chart' is mandatory field
     }
-    load1Chart(&domReader, ptrChart);
+    if ( ! load1Chart(&domReader, ptrChart) )
+    {
+        return false;
+    }
 
     // <xsd:element name="lang" type="CT_TextLanguageID" minOccurs="0" maxOccurs="1"/>
     XMLDOM::Node* ptrLang = domReader.findNode( 1, "c:lang" );
@@ -413,9 +414,12 @@ bool ChartPrivate::load1Chart(XMLDOM::XMLDOMReader *pReader, XMLDOM::Node* ptrCh
     XMLDOM::Node* ptrPlotArea = pReader->findNode( 2, "c:plotArea" );
     if ( NULL == ptrPlotArea )
     {
-        return false; // mandatory field
+        return false; // 'plotArea' is mandatory field
     }
-    load2PlotArea( pReader, ptrPlotArea );
+    if ( ! load2PlotArea( pReader, ptrPlotArea ) )
+    {
+        return false;
+    }
 
     // <xsd:element name="title" type="CT_Title" minOccurs="0" maxOccurs="1"/>
     XMLDOM::Node* ptrTitle = pReader->findNode( 2, "c:title" );
@@ -500,34 +504,140 @@ bool ChartPrivate::load2PlotArea(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* pt
     XMLDOM::Node* ptrLayout = pReader->findNode( 3, "c:layout" );
     if ( NULL != ptrLayout )
     {
-        // load3Layout( pReader, ptrLayout );
+        // bool lLayout = load3Layout( pReader, ptrLayout );
     }
 
+    bool loadingChart = false;
+
     XMLDOM::Node* ptrAreaChart = pReader->findNode( 3, "c:areaChart" );
+    if ( NULL != ptrAreaChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3AreaChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrArea3DChart = pReader->findNode( 3, "c:area3DChart" );
+    if ( NULL != ptrArea3DChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3Aread3DChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrLineChart = pReader->findNode( 3, "c:lineChart" );
+    if ( NULL != ptrLineChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3LineChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrLine3DChart = pReader->findNode( 3, "c:line3DChart" );
+    if ( NULL != ptrLine3DChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3Line3DChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrStockChart = pReader->findNode( 3, "c:stockChart" );
+    if ( NULL != ptrStockChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3StockChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrRadarChart = pReader->findNode( 3, "c:radarChart" );
+    if ( NULL != ptrRadarChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3RadarChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrScatterChart = pReader->findNode( 3, "c:scatterChart" );
+    if ( NULL != ptrScatterChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3SactterChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrPiChart = pReader->findNode( 3, "c:pieChart" );
+    if ( NULL != ptrPiChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3PieChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrPie3DChart = pReader->findNode( 3, "c:pie3DChart" );
+    if ( NULL != ptrPie3DChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3Pie3DChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrDoughnutChart = pReader->findNode( 3, "c:doughnutChart" );
+    if ( NULL != ptrDoughnutChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3DoughnutChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrBarChart = pReader->findNode( 3, "c:barChart" );
+    if ( NULL != ptrBarChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3BarChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrBar3DChart = pReader->findNode( 3, "c:bar3DChart" );
+    if ( NULL != ptrBar3DChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3Bar3DChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrOfPieChart = pReader->findNode( 3, "c:ofPieChart" );
+    if ( NULL != ptrOfPieChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3OfPieChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrSurfaceChart = pReader->findNode( 3, "c:surfaceChart" );
+    if ( NULL != ptrSurfaceChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3SurfaceChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrSurface3DChart = pReader->findNode( 3, "c:surface3DChart" );
+    if ( NULL != ptrSurface3DChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3Surface3DChart( pReader, ptr Chart );
+    }
+
     XMLDOM::Node* ptrBubbleChart = pReader->findNode( 3, "c:bubbleChart" );
+    if ( NULL != ptrBubbleChart )
+    {
+        loadingChart = true;
+        // loadingChart = load3BubbleChart( pReader, ptr Chart );
+    }
+
+    if (!loadingChart)
+    {
+        qDebug() << "[debug] failed to load any chart";
+        return false;
+    }
 
     // <xsd:element name="dTable" type="CT_DTable" minOccurs="0" maxOccurs="1"/>
     XMLDOM::Node* ptrDTable = pReader->findNode( 3, "c:dTable" );
+    //!TODO: load3DTable()
 
     // <xsd:element name="spPr" type="a:CT_ShapeProperties" minOccurs="0" maxOccurs="1"/>
     XMLDOM::Node* ptrSpPr = pReader->findNode( 3, "c:spPr" );
+    //!TODO: load3SpPr()
 
     // <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
     XMLDOM::Node* ptrExtLst = pReader->findNode( 3, "c:extLst" );
+    //!TODO: load3ExtLst()
 
     return true;
 }

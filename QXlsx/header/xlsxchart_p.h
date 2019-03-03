@@ -16,9 +16,9 @@
 #include "xlsxabstractooxmlfile_p.h"
 #include "xlsxchart.h"
 
-#include "Attr.h"
-#include "Node.h"
-#include "XMLDOMReader.h"
+#include "xdattr.h"
+#include "xdnode.h"
+#include "xdxmldomreader.h"
 
 QT_BEGIN_NAMESPACE_XLSX
 
