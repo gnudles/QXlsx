@@ -248,7 +248,7 @@ void Chart::saveToXmlFile(QIODevice *device) const
     </chartSpace>
 */
 
-// #define LOADING_CHART_TYPE_1
+// #define LOADING_CHART_TYPE_1 // 1 is old type.
 
 bool Chart::loadFromXmlFile(QIODevice *device)
 {
@@ -411,7 +411,7 @@ bool ChartPrivate::load1Chart(XMLDOM::XMLDOMReader *pReader, XMLDOM::Node* ptrCh
         return false;
 
     // <xsd:element name="plotArea" type="CT_PlotArea" minOccurs="1" maxOccurs="1"/>
-    XMLDOM::Node* ptrPlotArea = pReader->findNode( 2, "c:plotArea" );
+    XMLDOM::Node* ptrPlotArea = pReader->findNode( ptrChart, "c:plotArea" );
     if ( NULL == ptrPlotArea )
     {
         return false; // 'plotArea' is mandatory field
@@ -422,21 +422,21 @@ bool ChartPrivate::load1Chart(XMLDOM::XMLDOMReader *pReader, XMLDOM::Node* ptrCh
     }
 
     // <xsd:element name="title" type="CT_Title" minOccurs="0" maxOccurs="1"/>
-    XMLDOM::Node* ptrTitle = pReader->findNode( 2, "c:title" );
+    XMLDOM::Node* ptrTitle = pReader->findNode( ptrChart, "c:title" );
     if ( NULL != ptrTitle )
     {
         load2Title( pReader, ptrTitle );
     }
 
     // <xsd:element name="legend" type="CT_Legend" minOccurs="0" maxOccurs="1"/>
-    XMLDOM::Node* ptrLegend = pReader->findNode( 2, "c:legend" );
+    XMLDOM::Node* ptrLegend = pReader->findNode( ptrChart, "c:legend" );
     if ( NULL != ptrLegend )
     {
         load2Legend( pReader, ptrLegend );
     }
 
     // <xsd:element name="plotVisOnly" type="CT_Boolean" minOccurs="0" maxOccurs="1"/>
-    XMLDOM::Node* ptrPlotVisOnly = pReader->findNode( 2, "c:plotVisOnly" );
+    XMLDOM::Node* ptrPlotVisOnly = pReader->findNode( ptrChart, "c:plotVisOnly" );
     if ( NULL != ptrPlotVisOnly )
     {
         load2PlotVisOnly( pReader, ptrPlotVisOnly );
@@ -484,7 +484,7 @@ bool ChartPrivate::load2Title(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrTi
     </xsd:sequence>
 </xsd:complexType>
 */
-bool ChartPrivate::load2PlotArea(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPlotArea )
+bool ChartPrivate::load2PlotArea(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPlotArea)
 {
     // c:plotarea
 
@@ -498,10 +498,10 @@ bool ChartPrivate::load2PlotArea(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* pt
 
         qDebug() << pNode->level << pNode->nodeName << pNode->nodeText ;
     }
-    */
+    // */
 
     // <xsd:element name="layout" type="CT_Layout" minOccurs="0" maxOccurs="1"/>
-    XMLDOM::Node* ptrLayout = pReader->findNode( 3, "c:layout" );
+    XMLDOM::Node* ptrLayout = pReader->findNode( ptrPlotArea, "c:layout" );
     if ( NULL != ptrLayout )
     {
         // bool lLayout = load3Layout( pReader, ptrLayout );
@@ -509,116 +509,100 @@ bool ChartPrivate::load2PlotArea(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* pt
 
     bool loadingChart = false;
 
-    XMLDOM::Node* ptrAreaChart = pReader->findNode( 3, "c:areaChart" );
+    XMLDOM::Node* ptrAreaChart = pReader->findNode( ptrPlotArea, "c:areaChart" );
     if ( NULL != ptrAreaChart )
     {
-        loadingChart = true;
-        // loadingChart = load3AreaChart( pReader, ptr Chart );
+        loadingChart = load3AreaChart( pReader, ptrAreaChart );
     }
 
-    XMLDOM::Node* ptrArea3DChart = pReader->findNode( 3, "c:area3DChart" );
+    XMLDOM::Node* ptrArea3DChart = pReader->findNode( ptrPlotArea, "c:area3DChart" );
     if ( NULL != ptrArea3DChart )
     {
-        loadingChart = true;
-        // loadingChart = load3Aread3DChart( pReader, ptr Chart );
+        loadingChart = load3Aread3DChart( pReader, ptrArea3DChart );
     }
 
-    XMLDOM::Node* ptrLineChart = pReader->findNode( 3, "c:lineChart" );
+    XMLDOM::Node* ptrLineChart = pReader->findNode( ptrPlotArea, "c:lineChart" );
     if ( NULL != ptrLineChart )
     {
-        loadingChart = true;
-        // loadingChart = load3LineChart( pReader, ptr Chart );
+        loadingChart = load3LineChart( pReader, ptrLineChart );
     }
 
-    XMLDOM::Node* ptrLine3DChart = pReader->findNode( 3, "c:line3DChart" );
+    XMLDOM::Node* ptrLine3DChart = pReader->findNode( ptrPlotArea, "c:line3DChart" );
     if ( NULL != ptrLine3DChart )
     {
-        loadingChart = true;
-        // loadingChart = load3Line3DChart( pReader, ptr Chart );
+        loadingChart = load3Line3DChart( pReader, ptrLine3DChart );
     }
 
-    XMLDOM::Node* ptrStockChart = pReader->findNode( 3, "c:stockChart" );
+    XMLDOM::Node* ptrStockChart = pReader->findNode( ptrPlotArea, "c:stockChart" );
     if ( NULL != ptrStockChart )
     {
-        loadingChart = true;
-        // loadingChart = load3StockChart( pReader, ptr Chart );
+        loadingChart = load3StockChart( pReader, ptrStockChart );
     }
 
-    XMLDOM::Node* ptrRadarChart = pReader->findNode( 3, "c:radarChart" );
+    XMLDOM::Node* ptrRadarChart = pReader->findNode( ptrPlotArea, "c:radarChart" );
     if ( NULL != ptrRadarChart )
     {
-        loadingChart = true;
-        // loadingChart = load3RadarChart( pReader, ptr Chart );
+        loadingChart = load3RadarChart( pReader, ptrRadarChart );
     }
 
-    XMLDOM::Node* ptrScatterChart = pReader->findNode( 3, "c:scatterChart" );
+    XMLDOM::Node* ptrScatterChart = pReader->findNode( ptrPlotArea, "c:scatterChart" );
     if ( NULL != ptrScatterChart )
     {
-        loadingChart = true;
-        // loadingChart = load3SactterChart( pReader, ptr Chart );
+        loadingChart = load3SactterChart( pReader, ptrScatterChart );
     }
 
-    XMLDOM::Node* ptrPiChart = pReader->findNode( 3, "c:pieChart" );
+    XMLDOM::Node* ptrPiChart = pReader->findNode( ptrPlotArea, "c:pieChart" );
     if ( NULL != ptrPiChart )
     {
-        loadingChart = true;
-        // loadingChart = load3PieChart( pReader, ptr Chart );
+        loadingChart = load3PieChart( pReader, ptrPiChart );
     }
 
-    XMLDOM::Node* ptrPie3DChart = pReader->findNode( 3, "c:pie3DChart" );
+    XMLDOM::Node* ptrPie3DChart = pReader->findNode( ptrPlotArea, "c:pie3DChart" );
     if ( NULL != ptrPie3DChart )
     {
-        loadingChart = true;
-        // loadingChart = load3Pie3DChart( pReader, ptr Chart );
+        loadingChart = load3Pie3DChart( pReader, ptrPie3DChart );
     }
 
-    XMLDOM::Node* ptrDoughnutChart = pReader->findNode( 3, "c:doughnutChart" );
+    XMLDOM::Node* ptrDoughnutChart = pReader->findNode( ptrPlotArea, "c:doughnutChart" );
     if ( NULL != ptrDoughnutChart )
     {
-        loadingChart = true;
-        // loadingChart = load3DoughnutChart( pReader, ptr Chart );
+        loadingChart = load3DoughnutChart( pReader, ptrDoughnutChart );
     }
 
-    XMLDOM::Node* ptrBarChart = pReader->findNode( 3, "c:barChart" );
+    XMLDOM::Node* ptrBarChart = pReader->findNode( ptrPlotArea, "c:barChart" );
     if ( NULL != ptrBarChart )
     {
-        loadingChart = true;
-        // loadingChart = load3BarChart( pReader, ptr Chart );
+        loadingChart = load3BarChart( pReader, ptrBarChart );
     }
 
-    XMLDOM::Node* ptrBar3DChart = pReader->findNode( 3, "c:bar3DChart" );
+    XMLDOM::Node* ptrBar3DChart = pReader->findNode( ptrPlotArea, "c:bar3DChart" );
     if ( NULL != ptrBar3DChart )
     {
-        loadingChart = true;
-        // loadingChart = load3Bar3DChart( pReader, ptr Chart );
+        loadingChart = load3Bar3DChart( pReader, ptrBar3DChart );
     }
 
-    XMLDOM::Node* ptrOfPieChart = pReader->findNode( 3, "c:ofPieChart" );
+    XMLDOM::Node* ptrOfPieChart = pReader->findNode( ptrPlotArea, "c:ofPieChart" );
     if ( NULL != ptrOfPieChart )
     {
-        loadingChart = true;
-        // loadingChart = load3OfPieChart( pReader, ptr Chart );
+        loadingChart = load3OfPieChart( pReader, ptrOfPieChart );
     }
 
-    XMLDOM::Node* ptrSurfaceChart = pReader->findNode( 3, "c:surfaceChart" );
+    XMLDOM::Node* ptrSurfaceChart = pReader->findNode( ptrPlotArea, "c:surfaceChart" );
     if ( NULL != ptrSurfaceChart )
     {
-        loadingChart = true;
-        // loadingChart = load3SurfaceChart( pReader, ptr Chart );
+        loadingChart = load3SurfaceChart( pReader, ptrSurfaceChart );
     }
 
-    XMLDOM::Node* ptrSurface3DChart = pReader->findNode( 3, "c:surface3DChart" );
+    XMLDOM::Node* ptrSurface3DChart = pReader->findNode( ptrPlotArea, "c:surface3DChart" );
     if ( NULL != ptrSurface3DChart )
     {
-        loadingChart = true;
-        // loadingChart = load3Surface3DChart( pReader, ptr Chart );
+        loadingChart = load3Surface3DChart( pReader, ptrSurface3DChart );
     }
 
-    XMLDOM::Node* ptrBubbleChart = pReader->findNode( 3, "c:bubbleChart" );
+    XMLDOM::Node* ptrBubbleChart = pReader->findNode( ptrPlotArea, "c:bubbleChart" );
     if ( NULL != ptrBubbleChart )
     {
-        loadingChart = true;
-        // loadingChart = load3BubbleChart( pReader, ptr Chart );
+        loadingChart = load3BubbleChart( pReader, ptrBubbleChart );
     }
 
     if (!loadingChart)
@@ -628,16 +612,437 @@ bool ChartPrivate::load2PlotArea(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* pt
     }
 
     // <xsd:element name="dTable" type="CT_DTable" minOccurs="0" maxOccurs="1"/>
-    XMLDOM::Node* ptrDTable = pReader->findNode( 3, "c:dTable" );
+    XMLDOM::Node* ptrDTable = pReader->findNode( ptrPlotArea, "c:dTable" );
     //!TODO: load3DTable()
 
     // <xsd:element name="spPr" type="a:CT_ShapeProperties" minOccurs="0" maxOccurs="1"/>
-    XMLDOM::Node* ptrSpPr = pReader->findNode( 3, "c:spPr" );
+    XMLDOM::Node* ptrSpPr = pReader->findNode( ptrPlotArea, "c:spPr" );
     //!TODO: load3SpPr()
 
     // <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
-    XMLDOM::Node* ptrExtLst = pReader->findNode( 3, "c:extLst" );
+    XMLDOM::Node* ptrExtLst = pReader->findNode( ptrPlotArea, "c:extLst" );
     //!TODO: load3ExtLst()
+
+    return true;
+}
+
+bool ChartPrivate::load3AreaChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrAreaChart )
+{
+/*
+<xsd:complexType name="CT_AreaChart">
+    <xsd:sequence>
+        <xsd:group   ref="EG_AreaChartShared"              minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="axId"   type="CT_UnsignedInt"   minOccurs="2" maxOccurs="2"/>
+        <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+
+    return true;
+}
+
+bool ChartPrivate::load3Aread3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrArea3DChart )
+{
+/*
+<xsd:complexType name="CT_Area3DChart">
+    <xsd:sequence>
+        <xsd:group ref="EG_AreaChartShared" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="gapDepth" type="CT_GapAmount"     minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="axId"     type="CT_UnsignedInt"   minOccurs="2" maxOccurs="3"/>
+        <xsd:element name="extLst"   type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+
+    return true;
+}
+
+bool ChartPrivate::load3LineChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrLineChart )
+{
+/*
+<xsd:complexType name="CT_LineChart">
+    <xsd:sequence>
+        <xsd:group   ref="EG_LineChartShared" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="hiLowLines" type="CT_ChartLines" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="upDownBars" type="CT_UpDownBars" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="marker"     type="CT_Boolean" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="smooth"     type="CT_Boolean" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="axId"       type="CT_UnsignedInt" minOccurs="2" maxOccurs="2"/>
+        <xsd:element name="extLst"     type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    return true;
+}
+
+bool ChartPrivate::load3Line3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrLine3DChart )
+{
+/*
+<xsd:complexType name="CT_Line3DChart">
+    <xsd:sequence>
+        <xsd:group   ref="EG_LineChartShared" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="gapDepth" type="CT_GapAmount"     minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="axId"     type="CT_UnsignedInt"   minOccurs="3" maxOccurs="3"/>
+        <xsd:element name="extLst"   type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    return true;
+}
+
+bool ChartPrivate::load3StockChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrStockChart )
+{
+/*
+<xsd:complexType name="CT_StockChart">
+    <xsd:sequence>
+        <xsd:element name="ser"        type="CT_LineSer"       minOccurs="3" maxOccurs="4"/>
+        <xsd:element name="dLbls"      type="CT_DLbls"         minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="dropLines"  type="CT_ChartLines"    minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="hiLowLines" type="CT_ChartLines"    minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="upDownBars" type="CT_UpDownBars"    minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="axId"       type="CT_UnsignedInt"   minOccurs="2" maxOccurs="2"/>
+        <xsd:element name="extLst"     type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    return true;
+}
+
+bool ChartPrivate::load3RadarChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrRadarChart )
+{
+/*
+<xsd:complexType name="CT_RadarChart">
+    <xsd:sequence>
+        <xsd:element name="radarStyle" type="CT_RadarStyle"    minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="varyColors" type="CT_Boolean"       minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="ser"        type="CT_RadarSer"      minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="dLbls"      type="CT_DLbls"         minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="axId"       type="CT_UnsignedInt"   minOccurs="2" maxOccurs="2"/>
+        <xsd:element name="extLst"     type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    return true;
+}
+
+bool ChartPrivate::load3SactterChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrScatterChart )
+{
+/*
+<xsd:complexType name="CT_ScatterChart">
+    <xsd:sequence>
+        <xsd:element name="scatterStyle" type="CT_ScatterStyle" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="varyColors" type="CT_Boolean" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="ser" type="CT_ScatterSer" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="dLbls" type="CT_DLbls" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="axId" type="CT_UnsignedInt" minOccurs="2" maxOccurs="2"/>
+        <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    return true;
+}
+
+bool ChartPrivate::load3PieChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPiChart )
+{
+/*
+<xsd:complexType name="CT_PieChart">
+    <xsd:sequence>
+        <xsd:group   ref="EG_PieChartShared" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="firstSliceAng"   type="CT_FirstSliceAng" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="extLst"          type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    return true;
+}
+
+bool ChartPrivate::load3Pie3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPie3DChart )
+{
+/*
+<xsd:complexType name="CT_Pie3DChart">
+    <xsd:sequence>
+        <xsd:group   ref="EG_PieChartShared" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    return true;
+}
+
+bool ChartPrivate::load3DoughnutChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrDoughnutChart )
+{
+/*
+<xsd:complexType name="CT_DoughnutChart">
+    <xsd:sequence>
+        <xsd:group   ref="EG_PieChartShared" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="firstSliceAng" type="CT_FirstSliceAng" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="holeSize"      type="CT_HoleSize"      minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="extLst"        type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    return true;
+}
+
+/*
+<xsd:group name="EG_BarChartShared">
+    <xsd:sequence>
+        <xsd:element name="barDir"     type="CT_BarDir"      minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="grouping"   type="CT_BarGrouping" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="varyColors" type="CT_Boolean"     minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="ser"        type="CT_BarSer"      minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="dLbls"      type="CT_DLbls"       minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:group>
+
+<xsd:complexType name="CT_BarGrouping">
+    <xsd:attribute name="val" type="ST_BarGrouping" default="clustered"/>
+</xsd:complexType>
+
+<xsd:simpleType name="ST_BarGrouping">
+    <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="percentStacked"/>
+        <xsd:enumeration value="clustered"/>
+        <xsd:enumeration value="standard"/>
+        <xsd:enumeration value="stacked"/>
+    </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:complexType name="CT_BarSer">
+    <xsd:sequence>
+        <xsd:group   ref="EG_SerShared" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="invertIfNegative" type="CT_Boolean"        minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="pictureOptions"   type="CT_PictureOptions" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="dPt"              type="CT_DPt"            minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="dLbls"            type="CT_DLbls"          minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="trendline"        type="CT_Trendline"      minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="errBars"          type="CT_ErrBars"        minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="cat"              type="CT_AxDataSource"   minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="val"              type="CT_NumDataSource"  minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="shape"            type="CT_Shape"          minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="extLst"           type="CT_ExtensionList"  minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+
+<xsd:complexType name="CT_DLbls">
+    <xsd:sequence>
+        <xsd:element name="dLbl" type="CT_DLbl" minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:choice>
+            <xsd:element name="delete" type="CT_Boolean" minOccurs="1" maxOccurs="1"/>
+            <xsd:group   ref="Group_DLbls" minOccurs="1" maxOccurs="1"/>
+        </xsd:choice>
+        <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+bool ChartPrivate::load3BarChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrBarChart )
+{
+/*
+<xsd:complexType name="CT_BarChart">
+    <xsd:sequence>
+        <xsd:group   ref="EG_BarChartShared" minOccurs="1" maxOccurs="1"/>
+        ...
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    bool bEG_BarChartShared = load3EG_BarChartShared( pReader, ptrBarChart );
+
+    // <xsd:element name="gapWidth" type="CT_GapAmount"     minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="overlap"  type="CT_Overlap"       minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="serLines" type="CT_ChartLines"    minOccurs="0" maxOccurs="unbounded"/>
+    // <xsd:element name="axId"     type="CT_UnsignedInt"   minOccurs="2" maxOccurs="2"/>
+    // <xsd:element name="extLst"   type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+
+    return true;
+}
+
+bool ChartPrivate::load3EG_BarChartShared(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrBarChart)
+{
+/*
+<xsd:group name="EG_BarChartShared">
+    <xsd:sequence>
+        <xsd:element name="barDir"     type="CT_BarDir"      minOccurs="1" maxOccurs="1"/>
+        ...
+    </xsd:sequence>
+</xsd:group>
+
+<xsd:complexType name="CT_BarDir">
+    <xsd:attribute name="val" type="ST_BarDir" default="col"/>
+</xsd:complexType>
+
+<xsd:simpleType name="ST_BarDir">
+    <xsd:restriction base="xsd:string">
+        <xsd:enumeration value="bar"/>
+        <xsd:enumeration value="col"/>
+    </xsd:restriction>
+</xsd:simpleType>
+*/
+
+    // /*
+    for (int ci = 0 ; ci < ptrBarChart->childNode.size() ; ci ++)
+    {
+        XMLDOM::Node* pNode = ptrBarChart->childNode.at( ci );
+        if ( NULL == pNode )
+            continue;
+
+        qDebug() << pNode->level << pNode->nodeName << pNode->nodeText ;
+    }
+    // */
+
+    XMLDOM::Node* ptrBarDir = pReader->findNode( ptrBarChart, "c:barDir" );
+    if ( NULL == ptrBarDir )
+    {
+        qDebug() << "[debug] c:barDir is mandatory field.";
+        return false;
+    }
+    // val (attribute)
+
+    XMLDOM::Attr* ptrAttr = pReader->findAttr( ptrBarDir, "val" );
+    if ( NULL == ptrAttr )
+    {
+        qDebug() << "[debug] c:barDir has no val attribute.";
+        return false;
+    }
+    // qDebug() << ptrAttr->name << ptrAttr->value;
+
+    if ( ptrAttr->value == "bar" )
+    {
+        //! TODO: barchart type is bar
+    }
+    else if ( ptrAttr->value == "col" )
+    {
+        //! TODO: barchart type is col
+    }
+    else
+    {
+        qDebug() << "[debug] c:barDir val is invalid." << ptrAttr->value ;
+        return false;
+    }
+
+    // <xsd:element name="grouping"   type="CT_BarGrouping" minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrGrouping = pReader->findNode( ptrBarChart, "c:grouping" );
+    if ( NULL == ptrGrouping )
+    {
+    }
+
+    // <xsd:element name="varyColors" type="CT_Boolean"     minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrVaryColors = pReader->findNode( ptrBarChart, "c:varyColors" );
+    if ( NULL == ptrVaryColors )
+    {
+    }
+
+    // <xsd:element name="ser"        type="CT_BarSer"      minOccurs="0" maxOccurs="unbounded"/>
+    XMLDOM::Node* ptrSer = pReader->findNode( ptrBarChart, "c:ser" );
+    if ( NULL == ptrSer )
+    {
+    }
+
+    // <xsd:element name="dLbls"      type="CT_DLbls"       minOccurs="0" maxOccurs="1"/>
+
+
+    return true;
+}
+
+bool ChartPrivate::load3Bar3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrBar3DChart)
+{
+/*
+<xsd:complexType name="CT_Bar3DChart">
+    <xsd:sequence>
+        <xsd:group   ref="EG_BarChartShared"                 minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="gapWidth" type="CT_GapAmount"     minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="gapDepth" type="CT_GapAmount"     minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="shape"    type="CT_Shape"         minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="axId"     type="CT_UnsignedInt"   minOccurs="2" maxOccurs="3"/>
+        <xsd:element name="extLst"   type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    bool bEG_BarChartShared = load3EG_BarChartShared( pReader, ptrBar3DChart );
+
+    return true;
+}
+
+bool ChartPrivate::load3OfPieChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrOfPieChart )
+{
+/*
+<xsd:complexType name="CT_OfPieChart">
+    <xsd:sequence>
+        <xsd:element name="ofPieType"     type="CT_OfPieType" minOccurs="1" maxOccurs="1"/>
+        <xsd:group   ref="EG_PieChartShared" minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="gapWidth"      type="CT_GapAmount" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="splitType"     type="CT_SplitType" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="splitPos"      type="CT_Double"    minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="custSplit"     type="CT_CustSplit" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="secondPieSize" type="CT_SecondPieSize" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="serLines"      type="CT_ChartLines"    minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="extLst"        type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    return true;
+}
+
+bool ChartPrivate::load3SurfaceChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrSurfaceChart )
+{
+/*
+<xsd:complexType name="CT_SurfaceChart">
+    <xsd:sequence>
+    <xsd:group   ref="EG_SurfaceChartShared" minOccurs="1" maxOccurs="1"/>
+    <xsd:element name="axId"   type="CT_UnsignedInt"   minOccurs="2" maxOccurs="3"/>
+    <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+    return true;
+}
+
+bool ChartPrivate::load3Surface3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node*ptrSurface3DChart )
+{
+/*
+<xsd:complexType name="CT_Surface3DChart">
+    <xsd:sequence>
+        <xsd:group   ref="EG_SurfaceChartShared"           minOccurs="1" maxOccurs="1"/>
+        <xsd:element name="axId"   type="CT_UnsignedInt"   minOccurs="3" maxOccurs="3"/>
+        <xsd:element name="extLst" type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
+
+
+    return true;
+}
+
+bool ChartPrivate::load3BubbleChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrBubbleChart )
+{
+/*
+<xsd:complexType name="CT_BubbleChart">
+    <xsd:sequence>
+        <xsd:element name="varyColors"     type="CT_Boolean"        minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="ser"            type="CT_BubbleSer"      minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="dLbls"          type="CT_DLbls"          minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="bubble3D"       type="CT_Boolean"        minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="bubbleScale"    type="CT_BubbleScale"    minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="showNegBubbles" type="CT_Boolean"        minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="sizeRepresents" type="CT_SizeRepresents" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="axId"           type="CT_UnsignedInt"    minOccurs="2" maxOccurs="2"/>
+        <xsd:element name="extLst"         type="CT_ExtensionList"  minOccurs="0" maxOccurs="1"/>
+    </xsd:sequence>
+</xsd:complexType>
+*/
 
     return true;
 }

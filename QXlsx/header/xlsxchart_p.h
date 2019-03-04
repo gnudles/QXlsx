@@ -38,20 +38,20 @@ public:
 public:
     XlsxAxis(){}
 
-    XlsxAxis( Type t,
-              XlsxAxis::AxisPos p,
+    XlsxAxis( Type axisType,
+              XlsxAxis::AxisPos axisPos,
               int id,
               int crossId,
               QString axisTitle = QString("") )
     {
-        type = t;
-        axisPos = p;
+        type = axisType;
+        axisPos = axisPos;
         axisId = id;
         crossAx = crossId;
 
         if ( !axisTitle.isEmpty() )
         {
-            axisNames[ p ] = axisTitle;
+            axisNames[ axisPos ] = axisTitle;
         }
     }
 
@@ -113,6 +113,27 @@ protected:
 protected:
     bool load2Title(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrTitle );
     bool load2PlotArea(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPlotArea );
+protected:
+    bool load3AreaChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrAreaChart );
+    bool load3Aread3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrArea3DChart );
+    bool load3LineChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrLineChart );
+    bool load3Line3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrLine3DChart );
+    bool load3StockChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrStockChart );
+    bool load3RadarChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrRadarChart );
+    bool load3SactterChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrScatterChart );
+    bool load3PieChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPiChart );
+    bool load3Pie3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPie3DChart );
+    bool load3DoughnutChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrDoughnutChart );
+
+    bool load3BarChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrBarChart );
+    bool load3Bar3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrBar3DChart );
+    bool load3EG_BarChartShared(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrBarChart);
+
+    bool load3OfPieChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrOfPieChart );
+    bool load3SurfaceChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrSurfaceChart );
+    bool load3Surface3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node*ptrSurface3DChart );
+    bool load3BubbleChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrBubbleChart );
+protected:
     bool load2Legend(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrLegend );
     bool load2PlotVisOnly(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrPlotVisOnly );
 

@@ -31,6 +31,8 @@ public:
 public:
     void debugNodes();
     Node* findNode(int level, QString nodeName);
+    Node* findNode(Node* parentNode, QString nodeName);
+    Attr* findAttr(Node* ptrNode, QString attrName);
 protected:
     void traverseXmlNode(const QDomNode& node, Node* parent);
 protected:

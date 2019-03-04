@@ -129,9 +129,11 @@ void XMLDOMReader::debugNodes()
 
 Node* XMLDOMReader::findNode(int level, QString nodeName)
 {
-    Node* ret = NULL;
     if ( level < 0 )
-        return ret;
+        return NULL;
+
+    if ( nodeName.isEmpty() )
+        return NULL;
 
     for (int ifc = 0 ; ifc < this->allNodes.size() ; ifc++ )
     {
@@ -142,12 +144,53 @@ Node* XMLDOMReader::findNode(int level, QString nodeName)
         if ( ptrNode->level == level &&
              ptrNode->nodeName == nodeName )
         {
-            ret = ptrNode;
-            return ret;
+            return ptrNode;
         }
     }
 
-    return ret;
+    return NULL;
+}
+
+Node* XMLDOMReader::findNode(Node* parentNode, QString nodeName)
+{
+    if ( NULL == parentNode )
+        return NULL;
+
+    if ( nodeName.isEmpty() )
+        return NULL;
+
+    for (int ic = 0 ; ic < parentNode->childNode.size()  ; ic++ )
+    {
+       Node* ptrNode = parentNode->childNode.at( ic );
+       if ( NULL == ptrNode )
+           continue;
+
+       if ( ptrNode->nodeName == nodeName)
+           return ptrNode;
+    }
+
+    return NULL;
+}
+
+Attr* XMLDOMReader::findAttr(Node* ptrNode, QString attrName)
+{
+    if ( NULL == ptrNode )
+        return NULL;
+
+    if ( attrName.isEmpty() )
+        return NULL;
+
+    for (int ic = 0 ; ic < ptrNode->attrList.size() ; ic++ )
+    {
+       Attr* ptrAttr = ptrNode->attrList.at( ic );
+       if ( NULL == ptrAttr )
+           continue;
+
+       if ( ptrAttr->name == attrName )
+           return ptrAttr;
+    }
+
+    return NULL;
 }
 
 void XMLDOMReader::clear()
