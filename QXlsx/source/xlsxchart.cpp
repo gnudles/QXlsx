@@ -248,8 +248,7 @@ void Chart::saveToXmlFile(QIODevice *device) const
     </chartSpace>
 */
 
-// #define LOADING_CHART_TYPE_1 // 1 is old type.
-
+// #define LOADING_CHART_TYPE_1 // type 1 is old type.
 bool Chart::loadFromXmlFile(QIODevice *device)
 {
     Q_D(Chart);
@@ -513,96 +512,160 @@ bool ChartPrivate::load2PlotArea(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* pt
     if ( NULL != ptrAreaChart )
     {
         loadingChart = load3AreaChart( pReader, ptrAreaChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_AreaChart;
+        }
     }
 
     XMLDOM::Node* ptrArea3DChart = pReader->findNode( ptrPlotArea, "c:area3DChart" );
     if ( NULL != ptrArea3DChart )
     {
         loadingChart = load3Aread3DChart( pReader, ptrArea3DChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_Area3DChart;
+        }
     }
 
     XMLDOM::Node* ptrLineChart = pReader->findNode( ptrPlotArea, "c:lineChart" );
     if ( NULL != ptrLineChart )
     {
         loadingChart = load3LineChart( pReader, ptrLineChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_LineChart;
+        }
     }
 
     XMLDOM::Node* ptrLine3DChart = pReader->findNode( ptrPlotArea, "c:line3DChart" );
     if ( NULL != ptrLine3DChart )
     {
         loadingChart = load3Line3DChart( pReader, ptrLine3DChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_Line3DChart;
+        }
     }
 
     XMLDOM::Node* ptrStockChart = pReader->findNode( ptrPlotArea, "c:stockChart" );
     if ( NULL != ptrStockChart )
     {
         loadingChart = load3StockChart( pReader, ptrStockChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_StockChart;
+        }
     }
 
     XMLDOM::Node* ptrRadarChart = pReader->findNode( ptrPlotArea, "c:radarChart" );
     if ( NULL != ptrRadarChart )
     {
         loadingChart = load3RadarChart( pReader, ptrRadarChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_RadarChart;
+        }
     }
 
     XMLDOM::Node* ptrScatterChart = pReader->findNode( ptrPlotArea, "c:scatterChart" );
     if ( NULL != ptrScatterChart )
     {
         loadingChart = load3SactterChart( pReader, ptrScatterChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_ScatterChart;
+        }
     }
 
     XMLDOM::Node* ptrPiChart = pReader->findNode( ptrPlotArea, "c:pieChart" );
     if ( NULL != ptrPiChart )
     {
         loadingChart = load3PieChart( pReader, ptrPiChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_PieChart;
+        }
     }
 
     XMLDOM::Node* ptrPie3DChart = pReader->findNode( ptrPlotArea, "c:pie3DChart" );
     if ( NULL != ptrPie3DChart )
     {
         loadingChart = load3Pie3DChart( pReader, ptrPie3DChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_Pie3DChart;
+        }
     }
 
     XMLDOM::Node* ptrDoughnutChart = pReader->findNode( ptrPlotArea, "c:doughnutChart" );
     if ( NULL != ptrDoughnutChart )
     {
         loadingChart = load3DoughnutChart( pReader, ptrDoughnutChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_DoughnutChart;
+        }
     }
 
     XMLDOM::Node* ptrBarChart = pReader->findNode( ptrPlotArea, "c:barChart" );
     if ( NULL != ptrBarChart )
     {
         loadingChart = load3BarChart( pReader, ptrBarChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_BarChart;
+        }
     }
 
     XMLDOM::Node* ptrBar3DChart = pReader->findNode( ptrPlotArea, "c:bar3DChart" );
     if ( NULL != ptrBar3DChart )
     {
         loadingChart = load3Bar3DChart( pReader, ptrBar3DChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_Bar3DChart;
+        }
     }
 
     XMLDOM::Node* ptrOfPieChart = pReader->findNode( ptrPlotArea, "c:ofPieChart" );
     if ( NULL != ptrOfPieChart )
     {
         loadingChart = load3OfPieChart( pReader, ptrOfPieChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_PieChart;
+        }
     }
 
     XMLDOM::Node* ptrSurfaceChart = pReader->findNode( ptrPlotArea, "c:surfaceChart" );
     if ( NULL != ptrSurfaceChart )
     {
         loadingChart = load3SurfaceChart( pReader, ptrSurfaceChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_Pie3DChart;
+        }
     }
 
     XMLDOM::Node* ptrSurface3DChart = pReader->findNode( ptrPlotArea, "c:surface3DChart" );
     if ( NULL != ptrSurface3DChart )
     {
         loadingChart = load3Surface3DChart( pReader, ptrSurface3DChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_SurfaceChart;
+        }
     }
 
     XMLDOM::Node* ptrBubbleChart = pReader->findNode( ptrPlotArea, "c:bubbleChart" );
     if ( NULL != ptrBubbleChart )
     {
         loadingChart = load3BubbleChart( pReader, ptrBubbleChart );
+        if (loadingChart)
+        {
+            this->chartType = Chart::CT_BubbleChart;
+        }
     }
 
     if (!loadingChart)
@@ -857,57 +920,63 @@ bool ChartPrivate::load3BarChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* pt
 */
 
     bool bEG_BarChartShared = load3EG_BarChartShared( pReader, ptrBarChart );
+    if ( !bEG_BarChartShared )
+    {
+        qDebug() << "EG_BarChartShared is mandatory group.";
+        return false;
+    }
 
     // <xsd:element name="gapWidth" type="CT_GapAmount"     minOccurs="0" maxOccurs="1"/>
     // <xsd:element name="overlap"  type="CT_Overlap"       minOccurs="0" maxOccurs="1"/>
     // <xsd:element name="serLines" type="CT_ChartLines"    minOccurs="0" maxOccurs="unbounded"/>
+
     // <xsd:element name="axId"     type="CT_UnsignedInt"   minOccurs="2" maxOccurs="2"/>
+
     // <xsd:element name="extLst"   type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
 
     return true;
 }
 
-bool ChartPrivate::load3EG_BarChartShared(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrBarChart)
-{
 /*
 <xsd:group name="EG_BarChartShared">
     <xsd:sequence>
         <xsd:element name="barDir"     type="CT_BarDir"      minOccurs="1" maxOccurs="1"/>
-        ...
+        <xsd:element name="grouping"   type="CT_BarGrouping" minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="varyColors" type="CT_Boolean"     minOccurs="0" maxOccurs="1"/>
+        <xsd:element name="ser"        type="CT_BarSer"      minOccurs="0" maxOccurs="unbounded"/>
+        <xsd:element name="dLbls"      type="CT_DLbls"       minOccurs="0" maxOccurs="1"/>
     </xsd:sequence>
 </xsd:group>
-
-<xsd:complexType name="CT_BarDir">
-    <xsd:attribute name="val" type="ST_BarDir" default="col"/>
-</xsd:complexType>
-
-<xsd:simpleType name="ST_BarDir">
-    <xsd:restriction base="xsd:string">
-        <xsd:enumeration value="bar"/>
-        <xsd:enumeration value="col"/>
-    </xsd:restriction>
-</xsd:simpleType>
 */
+bool ChartPrivate::load3EG_BarChartShared(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrBarChart)
+{
+    /*
+    <xsd:group name="EG_BarChartShared">
+        <xsd:sequence>
+            <xsd:element name="barDir"     type="CT_BarDir"      minOccurs="1" maxOccurs="1"/>
+            ...
+        </xsd:sequence>
+    </xsd:group>
 
-    // /*
-    for (int ci = 0 ; ci < ptrBarChart->childNode.size() ; ci ++)
-    {
-        XMLDOM::Node* pNode = ptrBarChart->childNode.at( ci );
-        if ( NULL == pNode )
-            continue;
+    <xsd:complexType name="CT_BarDir">
+        <xsd:attribute name="val" type="ST_BarDir" default="col"/>
+    </xsd:complexType>
 
-        qDebug() << pNode->level << pNode->nodeName << pNode->nodeText ;
-    }
-    // */
-
+    <xsd:simpleType name="ST_BarDir">
+        <xsd:restriction base="xsd:string">
+            <xsd:enumeration value="bar"/>
+            <xsd:enumeration value="col"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    */
     XMLDOM::Node* ptrBarDir = pReader->findNode( ptrBarChart, "c:barDir" );
     if ( NULL == ptrBarDir )
     {
         qDebug() << "[debug] c:barDir is mandatory field.";
         return false;
     }
-    // val (attribute)
 
+    // val (attribute)
     XMLDOM::Attr* ptrAttr = pReader->findAttr( ptrBarDir, "val" );
     if ( NULL == ptrAttr )
     {
@@ -919,10 +988,14 @@ bool ChartPrivate::load3EG_BarChartShared(XMLDOM::XMLDOMReader* pReader, XMLDOM:
     if ( ptrAttr->value == "bar" )
     {
         //! TODO: barchart type is bar
+        //!
+
     }
     else if ( ptrAttr->value == "col" )
     {
         //! TODO: barchart type is col
+        //!
+
     }
     else
     {
@@ -931,25 +1004,91 @@ bool ChartPrivate::load3EG_BarChartShared(XMLDOM::XMLDOMReader* pReader, XMLDOM:
     }
 
     // <xsd:element name="grouping"   type="CT_BarGrouping" minOccurs="0" maxOccurs="1"/>
+    /*
+    <xsd:complexType name="CT_BarGrouping">
+        <xsd:attribute name="val" type="ST_BarGrouping" default="clustered"/>
+    </xsd:complexType>
+    */
     XMLDOM::Node* ptrGrouping = pReader->findNode( ptrBarChart, "c:grouping" );
-    if ( NULL == ptrGrouping )
+    if ( NULL != ptrGrouping )
     {
+        XMLDOM::Attr* pAttr = pReader->findAttr( ptrGrouping, "val" );
+        if ( pAttr != NULL )
+        {
+            /*
+            <xsd:simpleType name="ST_BarGrouping">
+                <xsd:restriction base="xsd:string">
+                    <xsd:enumeration value="percentStacked"/>
+                    <xsd:enumeration value="clustered"/>
+                    <xsd:enumeration value="standard"/>
+                    <xsd:enumeration value="stacked"/>
+                </xsd:restriction>
+            </xsd:simpleType>
+            */
+           if ( pAttr->value == "percentStacked" )
+           {
+
+           }
+           else if ( pAttr->value == "clustered" ) // default
+           {
+
+           }
+           else if ( pAttr->value == "standard" )
+           {
+
+           }
+           else if ( pAttr->value == "stacked" )
+           {
+
+           }
+           else
+           {
+                // invalid value
+           }
+        }
     }
 
     // <xsd:element name="varyColors" type="CT_Boolean"     minOccurs="0" maxOccurs="1"/>
     XMLDOM::Node* ptrVaryColors = pReader->findNode( ptrBarChart, "c:varyColors" );
-    if ( NULL == ptrVaryColors )
+    if ( NULL != ptrVaryColors )
     {
+        // <xsd:complexType name="CT_Boolean">
+        //   <xsd:attribute name="val" type="xsd:boolean" use="optional" default="true"/>
+        // </xsd:complexType>
+
+        // ptrVaryColors->attrList
+        XMLDOM::Attr* pAttr = pReader->findAttr( ptrVaryColors, "val" );
+        if ( pAttr != NULL )
+        {
+            bool bVal;
+            if ( pAttr->value == "true" || pAttr->value == "1" )
+            {
+                bVal = true;
+            }
+            else if ( pAttr->value == "false" || pAttr->value == "0" )
+            {
+                bVal = false;
+            }
+            else
+            {
+                // invalid value
+            }
+        }
     }
 
     // <xsd:element name="ser"        type="CT_BarSer"      minOccurs="0" maxOccurs="unbounded"/>
     XMLDOM::Node* ptrSer = pReader->findNode( ptrBarChart, "c:ser" );
-    if ( NULL == ptrSer )
+    if ( NULL != ptrSer )
     {
+
     }
 
     // <xsd:element name="dLbls"      type="CT_DLbls"       minOccurs="0" maxOccurs="1"/>
+    XMLDOM::Node* ptrDLbls = pReader->findNode( ptrBarChart, "c:dLbls" );
+    if ( NULL != ptrDLbls )
+    {
 
+    }
 
     return true;
 }
@@ -960,21 +1099,27 @@ bool ChartPrivate::load3Bar3DChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* 
 <xsd:complexType name="CT_Bar3DChart">
     <xsd:sequence>
         <xsd:group   ref="EG_BarChartShared"                 minOccurs="1" maxOccurs="1"/>
-        <xsd:element name="gapWidth" type="CT_GapAmount"     minOccurs="0" maxOccurs="1"/>
-        <xsd:element name="gapDepth" type="CT_GapAmount"     minOccurs="0" maxOccurs="1"/>
-        <xsd:element name="shape"    type="CT_Shape"         minOccurs="0" maxOccurs="1"/>
-        <xsd:element name="axId"     type="CT_UnsignedInt"   minOccurs="2" maxOccurs="3"/>
-        <xsd:element name="extLst"   type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
+        ...
     </xsd:sequence>
 </xsd:complexType>
 */
-
     bool bEG_BarChartShared = load3EG_BarChartShared( pReader, ptrBar3DChart );
+    if ( !bEG_BarChartShared )
+    {
+        qDebug() << "EG_BarChartShared is mandatory group.";
+        return false;
+    }
+
+    // <xsd:element name="gapWidth" type="CT_GapAmount"     minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="gapDepth" type="CT_GapAmount"     minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="shape"    type="CT_Shape"         minOccurs="0" maxOccurs="1"/>
+    // <xsd:element name="axId"     type="CT_UnsignedInt"   minOccurs="2" maxOccurs="3"/>
+    // <xsd:element name="extLst"   type="CT_ExtensionList" minOccurs="0" maxOccurs="1"/>
 
     return true;
 }
 
-bool ChartPrivate::load3OfPieChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrOfPieChart )
+bool ChartPrivate::load3OfPieChart(XMLDOM::XMLDOMReader* pReader, XMLDOM::Node* ptrOfPieChart)
 {
 /*
 <xsd:complexType name="CT_OfPieChart">
@@ -1109,36 +1254,7 @@ bool ChartPrivate::loadXmlPlotArea(QXmlStreamReader &reader)
 {
     Q_ASSERT(reader.name() == QLatin1String("plotArea"));
 
-    // TO DEBUG:
-
-    /*
-    reader.readNext();
-
-    while (!reader.atEnd())
-    {
-        if (reader.isStartElement())
-        {
-            if (loadXmlPlotAreaElement(reader))
-            {
-
-            }
-            else
-            {
-                qDebug() << "[debug] failed to load plotarea element.";
-                return false;
-            }
-
-            reader.readNext();
-        }
-        else
-        {
-
-            reader.readNext();
-        }
-    }
-    */
-
-    while (!reader.atEnd())
+      while (!reader.atEnd())
     {
         reader.readNextStartElement();
         if (reader.tokenType() == QXmlStreamReader::StartElement)
@@ -1362,18 +1478,18 @@ void ChartPrivate::saveXmlChart(QXmlStreamWriter &writer) const
         case Chart::CT_Area3DChart:     saveXmlAreaChart(writer); break;
         case Chart::CT_LineChart:       saveXmlLineChart(writer); break;
         case Chart::CT_Line3DChart:     saveXmlLineChart(writer); break;
-        case Chart::CT_StockChart: break;
-        case Chart::CT_RadarChart: break;
+        case Chart::CT_StockChart:      break;
+        case Chart::CT_RadarChart:      break;
         case Chart::CT_ScatterChart:    saveXmlScatterChart(writer); break;
         case Chart::CT_PieChart:        saveXmlPieChart(writer); break;
         case Chart::CT_Pie3DChart:      saveXmlPieChart(writer); break;
         case Chart::CT_DoughnutChart:   saveXmlDoughnutChart(writer); break;
         case Chart::CT_BarChart:        saveXmlBarChart(writer); break;
         case Chart::CT_Bar3DChart:      saveXmlBarChart(writer); break;
-        case Chart::CT_OfPieChart: break;
-        case Chart::CT_SurfaceChart:  break;
-        case Chart::CT_Surface3DChart: break;
-        case Chart::CT_BubbleChart:  break;
+        case Chart::CT_OfPieChart:      break;
+        case Chart::CT_SurfaceChart:    break;
+        case Chart::CT_Surface3DChart:  break;
+        case Chart::CT_BubbleChart:     break;
         default:  break;
     }
 
