@@ -56,7 +56,7 @@ Travis CI | AppVeyor  | CodeFactor
 - If you would like to translate README.md into your native language, please contact me.
 	- You can either raise an issue or use a pull request. (such as README.ko.md)
 
-## But me a coffee
+## :coffee: Buy me a coffee
 
 <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/Yukrf5X">
 <img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee">
