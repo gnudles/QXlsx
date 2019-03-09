@@ -58,7 +58,7 @@ Travis CI | AppVeyor  | CodeFactor
 
 ## :coffee: Buy me a coffee
 
-If this project has helped you, please buy me a cup of coffee.
+If this project has helped you, please buy me a cup of coffee! :joy:
 
 <a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/Yukrf5X">
 <img src="https://www.buymeacoffee.com/assets/img/BMC-btn-logo.svg" alt="Buy me a coffee">
