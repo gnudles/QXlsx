@@ -9,6 +9,8 @@
 - Development language of QXlsx is C++. (with Qt)
 - You don't need to use static library or dynamic shared object using QXlsx.
 
+---
+
 ## :page_with_curl: How to use
 - See [examples](Example.md)
 	- HelloWorld : Hello world example (the most basic structure)
@@ -17,11 +19,15 @@
 	- Copycat : load xlsx file and display on widget. print xlsx file.
 	- WebServer : load xlsx and display to web
 
+---
+
 ## :wrench: How to set up (Installation)
 
 - See [how to setup QXlsx project](HowToSetProject.md)
 	- You don't need to use static library or dynamic shared object using QXlsx.
 	- Just copy QXlsx project files into your project.	
+
+---
 
 ## :computer: Tested environment
 
@@ -31,16 +37,24 @@ Travis CI | AppVeyor  | CodeFactor
 
 - See [tested environments](TestEnv.md) for more information.
 
+---
+
 ## :newspaper: Issue
 
 - [![Waffle.io - Columns and their card count](https://badge.waffle.io/QtExcel/QXlsx.svg?columns=all)](https://waffle.io/QtExcel/QXlsx) 
+
+---
 
 ## :construction_worker: To Do
 - [To test](ToTest.md)
 - [What to upgrade](ToUpgrade.md).
 
+---
+
 ## :sunglasses: Contributions
 - See [contributors](https://github.com/QtExcel/QXlsx/graphs/contributors).
+
+---
 
 ## :link: License and links
 - QXlsx is under MIT license. [https://github.com/QtExcel/QXlsx](https://github.com/QtExcel/QXlsx)
@@ -50,6 +64,8 @@ Travis CI | AppVeyor  | CodeFactor
 - XMLDOMReader is under LGPL 3 license or Commercial license. [https://github.com/j2doll/XMLDOMReader](https://github.com/j2doll/XMLDOMReader)
 - Qt is under LGPL 3 license or Commercial license. [https://www.qt.io/](https://www.qt.io/) 
 
+---
+
 ## :email: Contact
 - Hi! I'm j2doll (aka Jay Two). My name is Korean and it is difficult for foreigners to pronounce it. Call me j2doll.
 - Leave me a issue. [https://github.com/QtExcel/QXlsx/issues](https://github.com/QtExcel/QXlsx/issues)
@@ -57,6 +73,8 @@ Travis CI | AppVeyor  | CodeFactor
 	- My native language is not English and my English is not fluent. Please, use EASY English. :-)
 - If you would like to translate README.md into your native language, please contact me.
 	- You can either raise an issue or use a pull request. (such as README.ko.md)
+
+---
 
 ## :coffee: Buy me a coffee
 
@@ -68,7 +86,7 @@ If this project has helped you, please buy me a cup of coffee! :joy:
 </a>
 	
 ---
-	
+
 ## Similar projects
 
 ### :star: <b>Qxlnt</b> [https://github.com/QtExcel/Qxlnt](https://github.com/QtExcel/Qxlnt)
