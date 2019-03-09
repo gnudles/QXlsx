@@ -67,6 +67,8 @@ If this project has helped you, please buy me a cup of coffee! :joy:
 <span style="margin-left:5px">Buy me a coffee</span>
 </a>
 	
+---
+	
 ## Similar projects
 
 ### :star: <b>Qxlnt</b> [https://github.com/QtExcel/Qxlnt](https://github.com/QtExcel/Qxlnt)
