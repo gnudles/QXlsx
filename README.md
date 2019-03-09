@@ -9,7 +9,7 @@
 - Development language of QXlsx is C++. (with Qt)
 - You don't need to use static library or dynamic shared object using QXlsx.
 
-## How to use
+## :page_with_curl: How to use
 - See [examples](Example.md)
 	- HelloWorld : Hello world example (the most basic structure)
 	- TestExcel : basic samples based on QtXlsx samples
@@ -17,11 +17,11 @@
 	- Copycat : load xlsx file and display on widget. print xlsx file.
 	- WebServer : load xlsx and display to web
 
-## How to set up (Installation)
+## :wrench: How to set up (Installation)
 
 - See [how to setup QXlsx project](HowToSetProject.md)	
 
-## Tested environment
+## :computer: Tested environment
 
 Travis CI | AppVeyor  | CodeFactor
 :-------: | :-------: | :--------:
@@ -29,18 +29,18 @@ Travis CI | AppVeyor  | CodeFactor
 
 - See [tested environments](TestEnv.md)
 
-## Issue
+## :newspaper: Issue
 
 [![Waffle.io - Columns and their card count](https://badge.waffle.io/QtExcel/QXlsx.svg?columns=all)](https://waffle.io/QtExcel/QXlsx) 
 
-## To Do
+## :construction_worker: To Do
 - [To test](ToTest.md)
 - [What to upgrade](ToUpgrade.md).
 
-## Contributions
+## :sunglasses: Contributions
 - See [contributors](https://github.com/QtExcel/QXlsx/graphs/contributors).
 
-## License and links
+## :link: License and links
 - QXlsx is under MIT license. [https://github.com/QtExcel/QXlsx](https://github.com/QtExcel/QXlsx)
 - QtXlsx is under MIT license. [https://github.com/dbzhang800/QtXlsxWriter](https://github.com/dbzhang800/QtXlsxWriter)
 - Qt-Table-Printer is under BSD 3-Clause license. [https://github.com/T0ny0/Qt-Table-Printer](https://github.com/T0ny0/Qt-Table-Printer) 
