@@ -19,7 +19,9 @@
 
 ## :wrench: How to set up (Installation)
 
-- See [how to setup QXlsx project](HowToSetProject.md)	
+- See [how to setup QXlsx project](HowToSetProject.md)
+	- You don't need to use static library or dynamic shared object using QXlsx.
+	- Just copy QXlsx project files into your project.	
 
 ## :computer: Tested environment
 
