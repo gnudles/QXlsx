@@ -61,7 +61,7 @@ Travis CI | AppVeyor  | CodeFactor
 - QtXlsx is under MIT license. [https://github.com/dbzhang800/QtXlsxWriter](https://github.com/dbzhang800/QtXlsxWriter)
 - Qt-Table-Printer is under BSD 3-Clause license. [https://github.com/T0ny0/Qt-Table-Printer](https://github.com/T0ny0/Qt-Table-Printer) 
 - recurse is under MIT license. [https://github.com/pkoretic/recurse](https://github.com/pkoretic/recurse)
-- XMLDOMReader is under LGPL 3 license or Commercial license. [https://github.com/j2doll/XMLDOMReader](https://github.com/j2doll/XMLDOMReader)
+- XMLDOMReader is under CC BY-ND 4.0 license or Commercial license. [https://github.com/j2doll/XMLDOMReader](https://github.com/j2doll/XMLDOMReader)
 - Qt is under LGPL 3 license or Commercial license. [https://www.qt.io/](https://www.qt.io/) 
 
 ---
