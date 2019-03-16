@@ -39,12 +39,6 @@ Travis CI | AppVeyor  | CodeFactor
 
 ---
 
-## :newspaper: Issue
-
-- [![Waffle.io - Columns and their card count](https://badge.waffle.io/QtExcel/QXlsx.svg?columns=all)](https://waffle.io/QtExcel/QXlsx) 
-
----
-
 ## :construction_worker: To Do
 - [To test](ToTest.md)
 - [What to upgrade](ToUpgrade.md).
