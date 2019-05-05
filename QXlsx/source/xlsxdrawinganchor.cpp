@@ -388,8 +388,10 @@ void DrawingAnchor::loadXmlObjectShape(QXmlStreamReader &reader)
                        m_drawing->workbook->addMediaFile(m_pictureFile, true);
                    }
             }else if (reader.name() == QLatin1String("off")) {
-               posTA = loadXmlPos(reader);
-               hasoffext=true;
+                QStringRef readerName = reader.name();
+
+                posTA = loadXmlPos(reader);
+                hasoffext=true;
             } else if (reader.name() == QLatin1String("ext")&&hasoffext) {
                extTA = loadXmlExt(reader);
                hasoffext=false;

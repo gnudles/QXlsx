@@ -220,11 +220,16 @@ bool DocumentPrivate::loadPackage(QIODevice *device)
 
 	//load drawings
 	for (int i=0; i<workbook->drawings().size(); ++i) {
+
 		Drawing *drawing = workbook->drawings()[i];
+
 		QString rel_path = getRelFilePath(drawing->filePath());
+
 		if (zipReader.filePaths().contains(rel_path))
 			drawing->relationships()->loadFromXmlData(zipReader.fileData(rel_path));
-		drawing->loadFromXmlData(zipReader.fileData(drawing->filePath()));
+
+        QString drawingFilePath = drawing->filePath();
+        drawing->loadFromXmlData(zipReader.fileData(drawingFilePath));
 	}
 
 	//load charts
