@@ -18,6 +18,41 @@ using namespace std;
 #include "xlsxrichstring.h"
 #include "xlsxworkbook.h"
 
+int test1( QVector<QVariant> params );
+int test2( QVector<QVariant> params );
+int test3( QVector<QVariant> params );
+
+int test()
+{
+    QVector<QVariant> params;
+    int ret = test3(params);
+
+    return ret;
+}
+
+int test3( QVector<QVariant> params )
+{
+    using namespace QXlsx;
+
+    QString testXlsxFileName = ":/Excel-Gantt-Chart-Template.xlsx";
+    Document doc( testXlsxFileName );
+    if ( ! doc.load() )
+    {
+        qDebug() << "[debug] faield to load xlsx : " << testXlsxFileName;
+        return (-1);
+    }
+
+    if ( !doc.saveAs("doc3.xlsx") )
+    {
+        qDebug() << "[debug] faield to save xlsx";
+        return (-2);
+    }
+
+    qDebug() << "[debug] success to save xlsx";
+
+    return 0;
+}
+
 int test2( QVector<QVariant> params )
 {
     using namespace QXlsx;
