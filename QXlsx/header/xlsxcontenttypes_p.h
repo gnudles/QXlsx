@@ -49,6 +49,7 @@ private:
 
     QString m_package_prefix;
     QString m_document_prefix;
+    bool  IsXlsmFile=false;    // 是否试带宏的XLSM文件 默认是 XLSX 文件
 };
 
 QT_END_NAMESPACE_XLSX

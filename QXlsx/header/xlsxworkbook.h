@@ -31,6 +31,7 @@
 #include <QList>
 #include <QImage>
 #include <QSharedPointer>
+#include <QBuffer>
 
 class QIODevice;
 
@@ -107,6 +108,11 @@ private:
     QList<QSharedPointer<AbstractSheet> > getSheetsByTypes(AbstractSheet::SheetType type) const;
     QStringList worksheetNames() const;
     AbstractSheet *addSheet(const QString &name, int sheetId, AbstractSheet::SheetType type = AbstractSheet::ST_WorkSheet);
+
+    QBuffer BinFileForVba;  //liu fei jin 2019-07-27 only for thisworkbook not for each sheet vba projects to be free once save bin file
+
+   // XlsxRelationship relationForVba;
+
 };
 
 QT_END_NAMESPACE_XLSX

@@ -87,14 +87,24 @@ public:
     bool date1904;
     QString defaultDateFormat;
 
-    int x_window;
-    int y_window;
-    int window_width;
-    int window_height;
+    QString x_window;
+    QString y_window;
+    QString window_width;
+    QString window_height;
+    QString xr2uid="";   // liu fei jin 2019-07-28
 
     int activesheetIndex;
-    int firstsheet;
+    int activeTab;       // liu fei jin 2019-07-28
+    int firstsheet=0;
     int table_count;
+
+    QString defaultThemeVersion;    // liu fei jin 2019-07-28
+    QString workbookPrcodeName;       // liu fei jin 2019-07-28
+
+
+
+
+
 
     //Used to generate new sheet name and id
     int last_worksheet_index;

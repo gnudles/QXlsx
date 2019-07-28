@@ -87,7 +87,7 @@ public:
 
 	CellRange dimension() const;
 
-	QString documentProperty(const QString &name) const;
+    QString documentProperty(const QString &name) const;
 	void setDocumentProperty(const QString &name, const QString &property);
 	QStringList documentPropertyNames() const;
 
