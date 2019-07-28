@@ -46,7 +46,7 @@ bool DocPropsCore::setProperty(const QString &name, const QString &value)
         validKeys << QStringLiteral("title") << QStringLiteral("subject")
                   << QStringLiteral("keywords") << QStringLiteral("description")
                   << QStringLiteral("category") << QStringLiteral("status")
-                  << QStringLiteral("created") << QStringLiteral("creator");
+                  << QStringLiteral("created") << QStringLiteral("creator")<<QStringLiteral("lastModifiedBy")  ;
     }
 
     if (!validKeys.contains(name))
@@ -103,7 +103,7 @@ void DocPropsCore::saveToXmlFile(QIODevice *device) const
     if (m_properties.contains(QStringLiteral("description")))
         writer.writeTextElement(dc, QStringLiteral("description"), m_properties[QStringLiteral("description")]);
 
-    writer.writeTextElement(cp, QStringLiteral("lastModifiedBy"), m_properties.contains(QStringLiteral("creator")) ? m_properties[QStringLiteral("creator")] : QStringLiteral("Qt Xlsx Library"));
+    writer.writeTextElement(cp, QStringLiteral("lastModifiedBy"), m_properties.contains(QStringLiteral("lastModifiedBy")) ? m_properties[QStringLiteral("lastModifiedBy")] : QStringLiteral("Qt Xlsx Library"));
 
     writer.writeStartElement(dcterms, QStringLiteral("created"));
     writer.writeAttribute(xsi, QStringLiteral("type"), QStringLiteral("dcterms:W3CDTF"));
@@ -154,6 +154,8 @@ bool DocPropsCore::loadFromXmlFile(QIODevice *device)
                  setProperty(QStringLiteral("category"), reader.readElementText());
              } else if (name == QStringLiteral("contentStatus") && nsUri == cp) {
                  setProperty(QStringLiteral("status"), reader.readElementText());
+             } else if (name == QStringLiteral("lastModifiedBy") && nsUri == cp){
+                 setProperty(QStringLiteral("lastModifiedBy"), reader.readElementText());
              }
          }
 

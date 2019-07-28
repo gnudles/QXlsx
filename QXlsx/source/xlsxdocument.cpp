@@ -46,6 +46,7 @@
 #include <QPointF>
 #include <QBuffer>
 #include <QDir>
+#include<QDebug>
 
 /*
 	From Wikipedia: The Open Packaging Conventions (OPC) is a
@@ -110,6 +111,7 @@ bool DocumentPrivate::loadPackage(QIODevice *device)
 		return false;
 	contentTypes = QSharedPointer<ContentTypes>(new ContentTypes(ContentTypes::F_LoadFromExists));
 	contentTypes->loadFromXmlData(zipReader.fileData(QStringLiteral("[Content_Types].xml")));
+
 
 	//Load root rels file
 	if (!filePaths.contains(QLatin1String("_rels/.rels")))
@@ -178,6 +180,28 @@ bool DocumentPrivate::loadPackage(QIODevice *device)
 		styles->loadFromXmlData(zipReader.fileData(path));
 		workbook->d_func()->styles = styles;
 	}
+
+    //load vbaProject    liu fei jin 2019-07-27
+    QList<XlsxRelationship> rels_vbaProject = workbook->relationships()->documentRelationships(QStringLiteral("/vbaProject"));
+   //   if (!rels_vbaProject.isEmpty()) {
+    //      qDebug()<<"LLLLLL"<<rels_vbaProject[0].target;
+        //In normal case this should be vbaProject.bin which in xl   only for thisworkbook  not for each sheet vba project
+        //QString name = rels_styles[0].target;
+
+        // dev34
+        QString path;
+       // if ( xlworkbook_Dir == "." ) // root
+       // {
+       //     path = name;
+       // }
+       // else
+       // {
+       //     path = xlworkbook_Dir + QLatin1String("/") + name;
+       // }
+        path =QStringLiteral("xl/vbaProject.bin");
+        workbook->BinFileForVba.setData(zipReader.fileData(path));
+        workbook->BinFileForVba.open(QBuffer::ReadWrite);// (zipReader.fileData(path)); //  (zipReader.fileData(path))
+    // }
 
 	//load sharedStrings
 	QList<XlsxRelationship> rels_sharedStrings = workbook->relationships()->documentRelationships(QStringLiteral("/sharedStrings"));
@@ -337,6 +361,11 @@ bool DocumentPrivate::savePackage(QIODevice *device) const
 		contentTypes->addSharedString();
 		zipWriter.addFile(QStringLiteral("xl/sharedStrings.xml"), workbook->sharedStrings()->saveToXmlData());
 	}
+
+    // save VBA .bin file liu fei jin 2019-07-27
+    contentTypes->addVbaProject();
+    zipWriter.addFile(QStringLiteral("xl/vbaProject.bin"), workbook->BinFileForVba.data());
+
 
     // save calc chain [dev16]
     contentTypes->addCalcChain();
