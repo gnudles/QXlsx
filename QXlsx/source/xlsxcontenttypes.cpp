@@ -74,7 +74,12 @@ void ContentTypes::addTheme()
 
 void ContentTypes::addWorkbook()
 {
-    addOverride(QStringLiteral("/xl/workbook.xml"), m_document_prefix + QStringLiteral("spreadsheetml.sheet.main+xml"));
+    // liu fei jin add support xlsm file 2019-07-28
+    if(IsXlsmFile){
+         addOverride(QStringLiteral("/xl/workbook.xml"), QStringLiteral("application/vnd.ms-excel.sheet.macroEnabled.main+xml"));
+    }else{
+         addOverride(QStringLiteral("/xl/workbook.xml"), m_document_prefix + QStringLiteral("spreadsheetml.sheet.main+xml"));
+    }
 }
 
 void ContentTypes::addWorksheetName(const QString &name)
@@ -129,8 +134,8 @@ void ContentTypes::addCalcChain()
 
 void ContentTypes::addVbaProject()
 {
-    //:TODO
-    addOverride(QStringLiteral("bin"), QStringLiteral("application/vnd.ms-office.vbaProject"));
+    //:liu fei jin on 2019-07-27
+    addOverride(QStringLiteral("/xl/vbaProject.bin"), QStringLiteral("application/vnd.ms-office.vbaProject"));
 }
 
 void ContentTypes::clearOverrides()
@@ -192,9 +197,12 @@ bool ContentTypes::loadFromXmlFile(QIODevice *device)
                 QString partName = attrs.value(QLatin1String("PartName")).toString();
                 QString type = attrs.value(QLatin1String("ContentType")).toString();
                 m_overrides.insert(partName, type);
+                // liu fei jin add for xlsm file suppport 2019-07-28
+                if((type.indexOf("ms-excel.sheet.macroEnabled.main")>-1)&& partName.indexOf("workbook.xml")){
+                    IsXlsmFile=true;
+                }
             }
         }
-
         if (reader.hasError()) {
             qDebug()<<reader.errorString();
         }

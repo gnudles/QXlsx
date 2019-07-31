@@ -28,25 +28,34 @@
 #include <QDir>
 #include <QFile>
 #include <QBuffer>
+#include<QDebug>
 
 namespace QXlsx {
 
-const QString schema_doc = QStringLiteral("http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-const QString schema_msPackage = QStringLiteral("http://schemas.microsoft.com/office/2006/relationships");
-const QString schema_package = QStringLiteral("http://schemas.openxmlformats.org/package/2006/relationships");
+const QString schema_doc =        QStringLiteral("http://schemas.openxmlformats.org/officeDocument/2006/relationships");
+const QString schema_msPackage =  QStringLiteral("http://schemas.microsoft.com/office/2006/relationships"); // liu fei jin vbaProject use this also 2019-07-28
+const QString schema_package =    QStringLiteral("http://schemas.openxmlformats.org/package/2006/relationships");
 //const QString schema_worksheet = QStringLiteral("http://schemas.openxmlformats.org/officeDocument/2006/relationships");
 Relationships::Relationships()
 {
 }
 
 QList<XlsxRelationship> Relationships::documentRelationships(const QString &relativeType) const
-{
-    return relationships(schema_doc + relativeType);
+{  // liu fei jin add for vba.bin 2019-07-28
+    if(relativeType.indexOf("/vbaProject")>-1){
+          return relationships(schema_msPackage + relativeType);
+    }else {
+          return relationships(schema_doc + relativeType);
+    }
 }
 
 void Relationships::addDocumentRelationship(const QString &relativeType, const QString &target)
-{
-    addRelationship(schema_doc + relativeType, target);
+{    // liu fei jin add for vba.bin 2019-07-28
+   if(relativeType.indexOf("/vbaProject")>-1){
+        addRelationship(schema_msPackage + relativeType, target);
+    }else {
+        addRelationship(schema_doc + relativeType, target);
+    }
 }
 
 QList<XlsxRelationship> Relationships::msPackageRelationships(const QString &relativeType) const
@@ -107,13 +116,16 @@ void Relationships::saveToXmlFile(QIODevice *device) const
     writer.writeStartDocument(QStringLiteral("1.0"), true);
     writer.writeStartElement(QStringLiteral("Relationships"));
     writer.writeAttribute(QStringLiteral("xmlns"), QStringLiteral("http://schemas.openxmlformats.org/package/2006/relationships"));
-    foreach (XlsxRelationship relation, m_relationships) {
+   foreach (XlsxRelationship relation, m_relationships) {
         writer.writeStartElement(QStringLiteral("Relationship"));
         writer.writeAttribute(QStringLiteral("Id"), relation.id);
         writer.writeAttribute(QStringLiteral("Type"), relation.type);
         writer.writeAttribute(QStringLiteral("Target"), relation.target);
         if (!relation.targetMode.isNull())
             writer.writeAttribute(QStringLiteral("TargetMode"), relation.targetMode);
+
+        //liu fei jin 2019-07-28
+        // qDebug()<<relation.target<<relation.id<<relation.type<<"in workbook relateship . saveto xlmfile";
         writer.writeEndElement();
     }
     writer.writeEndElement();//Relationships
@@ -145,6 +157,8 @@ bool Relationships::loadFromXmlFile(QIODevice *device)
                  relationship.target = attributes.value(QLatin1String("Target")).toString();
                  relationship.targetMode = attributes.value(QLatin1String("TargetMode")).toString();
                  m_relationships.append(relationship);
+                 //liu fei jin 2019-07-28
+                 // qDebug()<<relationship.id<<relationship.type<<relationship.target<<relationship.targetMode<<"at load rel rel";
              }
          }
 

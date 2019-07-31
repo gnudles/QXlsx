@@ -44,7 +44,6 @@ public:
     Document *q_ptr;
     const QString defaultPackageName; //default name when package name not specified
     QString packageName; //name of the .xlsx file
-
     QMap<QString, QString> documentProperties; //core, app and custom properties
     QSharedPointer<Workbook> workbook;
     QSharedPointer<ContentTypes> contentTypes;
